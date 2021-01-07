@@ -84,7 +84,7 @@ class Permission extends VuexModule {
   }
 
   @Action
-  async buildRoutesAction(id?: number | string): Promise<AppRouteRecordRaw[]> {
+  async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
     const { t } = useI18n();
     let routes: AppRouteRecordRaw[] = [];
     const roleList = toRaw(userStore.getRoleListState);
@@ -106,11 +106,11 @@ class Permission extends VuexModule {
         duration: 1,
       });
       // 这里获取后台路由菜单逻辑自行修改
-      const paramId = id || userStore.getUserInfoState.userId;
-      if (!paramId) {
-        throw new Error('paramId is undefined!');
-      }
-      let routeList = (await getMenuListById({ id: paramId })) as AppRouteRecordRaw[];
+      //       const paramId = id || userStore.getUserInfoState.userId;
+      //       if (!paramId) {
+      //         throw new Error('paramId is undefined!');
+      //       }
+      let routeList = (await getMenuListById()) as AppRouteRecordRaw[];
 
       // 动态引入组件
       routeList = transformObjToRoute(routeList);

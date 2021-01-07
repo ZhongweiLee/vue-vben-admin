@@ -1,18 +1,17 @@
 import { defHttp } from '/@/utils/http/axios';
 
-import { getMenuListByIdParams, getMenuListByIdParamsResultModel } from './model/menuModel';
+import { getMenuListByIdParamsResultModel } from './model/menuModel';
 
 enum Api {
-  GetMenuListById = '/getMenuListById',
+  GetMenuListById = '/user/getLoginUserMenuList',
 }
 
 /**
  * @description: Get user menu based on id
  */
-export function getMenuListById(params: getMenuListByIdParams) {
+export function getMenuListById() {
   return defHttp.request<getMenuListByIdParamsResultModel>({
     url: Api.GetMenuListById,
     method: 'GET',
-    params,
   });
 }

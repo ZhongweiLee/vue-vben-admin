@@ -12,7 +12,11 @@
 
           <a-form class="mx-auto mt-10" :model="formData" :rules="formRules" ref="formRef">
             <a-form-item name="account">
-              <a-input size="large" v-model:value="formData.account" placeholder="username: vben" />
+              <a-input
+                size="large"
+                v-model:value="formData.account"
+                placeholder="username: admin"
+              />
             </a-form-item>
             <a-form-item name="password">
               <a-input-password
@@ -95,7 +99,7 @@
       // const openLoginVerifyRef = computed(() => appStore.getProjectConfig.openLoginVerify);
 
       const formData = reactive({
-        account: 'vben',
+        account: 'admin',
         password: '123456',
         // verify: undefined,
       });
@@ -134,7 +138,7 @@
           if (userInfo) {
             notification.success({
               message: t('sys.login.loginSuccessTitle'),
-              description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.realName}`,
+              description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.nickName}`,
               duration: 3,
             });
           }

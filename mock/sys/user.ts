@@ -61,7 +61,7 @@ export default [
     },
   },
   {
-    url: '/api/getUserInfoById',
+    url: '/api/getUserInfo',
     timeout: 200,
     method: 'get',
     response: ({ query }) => {

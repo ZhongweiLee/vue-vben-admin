@@ -14,7 +14,7 @@ export interface GetUserInfoByUserIdParams {
 }
 
 export interface RoleInfo {
-  roleName: string;
+  //roleName: string;
   value: string;
 }
 
@@ -22,7 +22,7 @@ export interface RoleInfo {
  * @description: Login interface return value
  */
 export interface LoginResultModel {
-  userId: string | number;
+  //userId: string | number;
   token: string;
   role: RoleInfo;
 }
@@ -30,14 +30,12 @@ export interface LoginResultModel {
 /**
  * @description: Get user information return value
  */
-export interface GetUserInfoByUserIdModel {
+export interface GetUserInfoModel {
   role: RoleInfo;
   // 用户id
   userId: string | number;
   // 用户名
   username: string;
   // 真实名字
-  realName: string;
-  // 介绍
-  desc?: string;
+  nickName: string;
 }
