@@ -2,7 +2,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { OperaLogParams, OperaLogListGetResultModel } from './model/operaLogModel';
 
 enum Api {
-  OperaLogList = '/syslog/operaLogList',
+  operaLogListUri = '/syslog/operaLogList',
 }
 
 /**
@@ -10,7 +10,7 @@ enum Api {
  */
 export function operaLogListApi(params: OperaLogParams) {
   return defHttp.request<OperaLogListGetResultModel>({
-    url: Api.OperaLogList,
+    url: Api.operaLogListUri,
     method: 'GET',
     params,
     headers: {

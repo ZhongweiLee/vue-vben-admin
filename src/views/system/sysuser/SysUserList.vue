@@ -1,24 +1,23 @@
 <template>
   <BasicTable @register="registerTable">
-    <template #form-custom> custom-slot</template>
+    <template #admin="{ record }"> {{ record.status == '0' ? '有效' : '停用' }}</template>
   </BasicTable>
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { BasicTable, useTable } from '/@/components/Table';
-  import { getLoginLogColumns, getLoginLogFormConfig } from './loginLogData';
-
-  import { loginLogListApi } from '/@/api/system/log/loginLog';
+  import { getSysUserListColumns, getSysUserListFormConfig } from './sysuserData';
+  import { sysUserListApi } from '/@/api/system/sysuser/sysuser';
 
   export default defineComponent({
     components: { BasicTable },
     setup() {
       const [registerTable] = useTable({
-        title: '登录日志',
-        api: loginLogListApi,
-        columns: getLoginLogColumns(),
+        title: '系统用户列表',
+        api: sysUserListApi,
+        columns: getSysUserListColumns(),
         useSearchForm: true,
-        formConfig: getLoginLogFormConfig(),
+        formConfig: getSysUserListFormConfig(),
         showTableSetting: true,
         showIndexColumn: false,
       });

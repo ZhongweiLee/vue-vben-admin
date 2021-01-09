@@ -20,6 +20,7 @@
         useSearchForm: true,
         formConfig: getDictTypeFormConfig(),
         showTableSetting: true,
+        showIndexColumn: false,
       });
 
       return {

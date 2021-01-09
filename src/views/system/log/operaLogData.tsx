@@ -1,5 +1,6 @@
 import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
+import moment from 'moment';
 
 export function getBasicColumns(): BasicColumn[] {
   return [
@@ -47,6 +48,7 @@ export function getBasicColumns(): BasicColumn[] {
       title: '操作时间',
       width: 120,
       dataIndex: 'operTime',
+      customRender: ({ record }) => moment(record.operTime).format('YYYY-MM-DD HH:mm:ss'),
     },
   ];
 }

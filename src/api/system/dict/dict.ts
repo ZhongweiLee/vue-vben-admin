@@ -1,16 +1,16 @@
 import { defHttp } from '/@/utils/http/axios';
-import { DictTypeGetResultModel, DictTypeListItem } from './model/dictModel';
+import { DictTypeGetResultModel, DictTypeListParams } from './model/dictModel';
 
 enum Api {
-  dictTypeListApi = '/dict/typelist',
+  dictTypeListUri = '/dict/typelist',
 }
 
 /**
  * @description: Get dict type list
  */
-export function dictTypeListApi(params: DictTypeListItem) {
+export function dictTypeListApi(params: DictTypeListParams) {
   return defHttp.request<DictTypeGetResultModel>({
-    url: Api.dictTypeListApi,
+    url: Api.dictTypeListUri,
     method: 'GET',
     params,
     headers: {

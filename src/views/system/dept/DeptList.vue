@@ -6,23 +6,20 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { BasicTable, useTable } from '/@/components/Table';
-  import { getLoginLogColumns, getLoginLogFormConfig } from './loginLogData';
-
-  import { loginLogListApi } from '/@/api/system/log/loginLog';
+  import { getDeptListColumns } from './deptData';
+  import { deptListApi } from '/@/api/system/dept/dept';
 
   export default defineComponent({
     components: { BasicTable },
     setup() {
       const [registerTable] = useTable({
-        title: '登录日志',
-        api: loginLogListApi,
-        columns: getLoginLogColumns(),
-        useSearchForm: true,
-        formConfig: getLoginLogFormConfig(),
-        showTableSetting: true,
-        showIndexColumn: false,
+        title: '部门列表',
+        api: deptListApi,
+        columns: getDeptListColumns(),
+        rowKey: 'deptId',
+        isTreeTable: true,
+        indentSize: 20,
       });
-
       return {
         registerTable,
       };

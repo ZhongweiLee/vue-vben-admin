@@ -2,22 +2,22 @@ import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import moment from 'moment';
 
-export function getLoginLogColumns(): BasicColumn[] {
+export function getRoleListColumns(): BasicColumn[] {
   return [
     {
       title: 'ID',
-      dataIndex: 'id',
+      dataIndex: 'roleId',
       width: 50,
     },
     {
-      title: '用户名',
-      dataIndex: 'username',
+      title: '角色名称',
+      dataIndex: 'roleName',
       width: 50,
     },
     {
-      title: '信息',
-      width: 120,
-      dataIndex: 'msg',
+      title: '角色编码',
+      width: 100,
+      dataIndex: 'roleKey',
     },
     {
       title: '状态',
@@ -25,30 +25,16 @@ export function getLoginLogColumns(): BasicColumn[] {
       width: 40,
     },
     {
-      title: 'IP',
-      dataIndex: 'ipaddr',
-      width: 100,
-    },
-    {
-      title: '浏览器',
-      width: 100,
-      dataIndex: 'browser',
-    },
-    {
-      title: '操作系统',
+      title: '创建时间',
       width: 120,
-      dataIndex: 'os',
+      dataIndex: 'createdAt',
+      customRender: ({ record }) => moment(record.createdAt).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
-      title: '平台',
-      width: 120,
-      dataIndex: 'platform',
-    },
-    {
-      title: '登录时间',
-      width: 150,
-      dataIndex: 'loginTime',
-      customRender: ({ record }) => moment(record.loginTime).format('YYYY-MM-DD HH:mm:ss'),
+      title: '是否管理员',
+      width: 80,
+      dataIndex: 'admin',
+      slots: { customRender: 'admin' },
     },
     {
       title: '备注',
@@ -58,21 +44,21 @@ export function getLoginLogColumns(): BasicColumn[] {
   ];
 }
 
-export function getLoginLogFormConfig(): Partial<FormProps> {
+export function getRoleListFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
     schemas: [
       {
-        field: `username`,
-        label: `用户名`,
+        field: `roleName`,
+        label: `角色名称`,
         component: 'Input',
         colProps: {
           span: 8,
         },
       },
       {
-        field: `ipaddr`,
-        label: `IP地址`,
+        field: `roleKey`,
+        label: `角色编码`,
         component: 'Input',
         colProps: {
           span: 8,
@@ -86,11 +72,11 @@ export function getLoginLogFormConfig(): Partial<FormProps> {
         componentProps: {
           options: [
             {
-              label: 'Success',
+              label: '有效',
               value: '0',
             },
             {
-              label: 'Error',
+              label: '失效',
               value: '1',
             },
           ],

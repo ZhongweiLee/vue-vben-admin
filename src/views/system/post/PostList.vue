@@ -6,19 +6,19 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { BasicTable, useTable } from '/@/components/Table';
-  import { getLoginLogColumns, getLoginLogFormConfig } from './loginLogData';
+  import { getPostListColumns, getPostListFormConfig } from './postData';
 
-  import { loginLogListApi } from '/@/api/system/log/loginLog';
+  import { postListApi } from '/@/api/system/post/post';
 
   export default defineComponent({
     components: { BasicTable },
     setup() {
       const [registerTable] = useTable({
-        title: '登录日志',
-        api: loginLogListApi,
-        columns: getLoginLogColumns(),
+        title: '岗位列表',
+        api: postListApi,
+        columns: getPostListColumns(),
         useSearchForm: true,
-        formConfig: getLoginLogFormConfig(),
+        formConfig: getPostListFormConfig(),
         showTableSetting: true,
         showIndexColumn: false,
       });

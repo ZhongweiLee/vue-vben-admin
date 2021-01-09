@@ -2,22 +2,22 @@ import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import moment from 'moment';
 
-export function getDictTypeColumns(): BasicColumn[] {
+export function getPostListColumns(): BasicColumn[] {
   return [
     {
       title: 'ID',
-      dataIndex: 'dictId',
-      width: 40,
-    },
-    {
-      title: '名称',
-      dataIndex: 'dictName',
+      dataIndex: 'postId',
       width: 50,
     },
     {
-      title: '编码',
+      title: '岗位名称',
+      dataIndex: 'postName',
+      width: 50,
+    },
+    {
+      title: '岗位编码',
       width: 100,
-      dataIndex: 'dictType',
+      dataIndex: 'postCode',
     },
     {
       title: '状态',
@@ -25,17 +25,7 @@ export function getDictTypeColumns(): BasicColumn[] {
       width: 40,
     },
     {
-      title: '备注',
-      dataIndex: 'remark',
-      width: 80,
-    },
-    {
-      title: '创建人',
-      width: 40,
-      dataIndex: 'createBy',
-    },
-    {
-      title: '添加时间',
+      title: '创建时间',
       width: 120,
       dataIndex: 'createdAt',
       customRender: ({ record }) => moment(record.createdAt).format('YYYY-MM-DD HH:mm:ss'),
@@ -43,29 +33,21 @@ export function getDictTypeColumns(): BasicColumn[] {
   ];
 }
 
-export function getDictTypeFormConfig(): Partial<FormProps> {
+export function getPostListFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
     schemas: [
       {
-        field: `dictName`,
-        label: `名称`,
+        field: `postName`,
+        label: `岗位名称`,
         component: 'Input',
         colProps: {
           span: 8,
         },
       },
       {
-        field: `dictType`,
-        label: `编码`,
-        component: 'Input',
-        colProps: {
-          span: 8,
-        },
-      },
-      {
-        field: `dictId`,
-        label: `ID`,
+        field: `postCode`,
+        label: `岗位编码`,
         component: 'Input',
         colProps: {
           span: 8,

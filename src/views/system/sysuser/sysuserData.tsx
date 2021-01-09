@@ -2,11 +2,11 @@ import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import moment from 'moment';
 
-export function getLoginLogColumns(): BasicColumn[] {
+export function getSysUserListColumns(): BasicColumn[] {
   return [
     {
       title: 'ID',
-      dataIndex: 'id',
+      dataIndex: 'userId',
       width: 50,
     },
     {
@@ -15,40 +15,46 @@ export function getLoginLogColumns(): BasicColumn[] {
       width: 50,
     },
     {
-      title: '信息',
-      width: 120,
-      dataIndex: 'msg',
+      title: '姓名',
+      width: 100,
+      dataIndex: 'nickName',
     },
     {
       title: '状态',
       dataIndex: 'status',
       width: 40,
+      slots: { customRender: 'status' },
     },
     {
-      title: 'IP',
-      dataIndex: 'ipaddr',
-      width: 100,
-    },
-    {
-      title: '浏览器',
-      width: 100,
-      dataIndex: 'browser',
-    },
-    {
-      title: '操作系统',
+      title: '创建时间',
       width: 120,
-      dataIndex: 'os',
+      dataIndex: 'createdAt',
+      customRender: ({ record }) => moment(record.createdAt).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
-      title: '平台',
+      title: '手机号',
+      width: 80,
+      dataIndex: 'phone',
+    },
+    {
+      title: '头像',
       width: 120,
-      dataIndex: 'platform',
+      dataIndex: 'avatar',
     },
     {
-      title: '登录时间',
-      width: 150,
-      dataIndex: 'loginTime',
-      customRender: ({ record }) => moment(record.loginTime).format('YYYY-MM-DD HH:mm:ss'),
+      title: '性别',
+      width: 40,
+      dataIndex: 'sex',
+    },
+    {
+      title: '邮箱',
+      width: 100,
+      dataIndex: 'email',
+    },
+    {
+      title: '部门',
+      width: 50,
+      dataIndex: 'deptName',
     },
     {
       title: '备注',
@@ -58,21 +64,13 @@ export function getLoginLogColumns(): BasicColumn[] {
   ];
 }
 
-export function getLoginLogFormConfig(): Partial<FormProps> {
+export function getSysUserListFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
     schemas: [
       {
         field: `username`,
-        label: `用户名`,
-        component: 'Input',
-        colProps: {
-          span: 8,
-        },
-      },
-      {
-        field: `ipaddr`,
-        label: `IP地址`,
+        label: `账号`,
         component: 'Input',
         colProps: {
           span: 8,
@@ -86,11 +84,11 @@ export function getLoginLogFormConfig(): Partial<FormProps> {
         componentProps: {
           options: [
             {
-              label: 'Success',
+              label: '有效',
               value: '0',
             },
             {
-              label: 'Error',
+              label: '失效',
               value: '1',
             },
           ],

@@ -2,7 +2,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { LoginLogParams, LoginLogListGetResultModel } from './model/loginLogModel';
 
 enum Api {
-  LoginLogList = '/syslog/loginLogList',
+  loginLogListUri = '/syslog/loginLogList',
 }
 
 /**
@@ -10,7 +10,7 @@ enum Api {
  */
 export function loginLogListApi(params: LoginLogParams) {
   return defHttp.request<LoginLogListGetResultModel>({
-    url: Api.LoginLogList,
+    url: Api.loginLogListUri,
     method: 'GET',
     params,
     headers: {

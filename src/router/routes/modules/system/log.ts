@@ -23,6 +23,46 @@ const systemLog: AppRouteModule = {
       },
     },
     {
+      path: 'dept',
+      name: 'Dept',
+      component: () => import('/@/views/system/dept/DeptList.vue'),
+      meta: {
+        title: t('routes.system.dept'),
+      },
+    },
+    {
+      path: 'menu',
+      name: 'Menu',
+      component: () => import('/@/views/system/menu/MenuList.vue'),
+      meta: {
+        title: t('routes.system.menu'),
+      },
+    },
+    {
+      path: 'post',
+      name: 'Post',
+      component: () => import('/@/views/system/post/PostList.vue'),
+      meta: {
+        title: t('routes.system.post'),
+      },
+    },
+    {
+      path: 'role',
+      name: 'Role',
+      component: () => import('/@/views/system/role/RoleList.vue'),
+      meta: {
+        title: t('routes.system.role'),
+      },
+    },
+    {
+      path: 'sysuser',
+      name: 'SysUser',
+      component: () => import('/@/views/system/sysuser/SysUserList.vue'),
+      meta: {
+        title: t('routes.system.sysuser'),
+      },
+    },
+    {
       path: 'system/log',
       name: 'Log',
       component: getParentLayout('Log'),

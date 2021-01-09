@@ -1,24 +1,23 @@
 <template>
   <BasicTable @register="registerTable">
-    <template #form-custom> custom-slot</template>
+    <template #admin="{ record }"> {{ record.admin ? '是' : '否' }}</template>
   </BasicTable>
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { BasicTable, useTable } from '/@/components/Table';
-  import { getLoginLogColumns, getLoginLogFormConfig } from './loginLogData';
-
-  import { loginLogListApi } from '/@/api/system/log/loginLog';
+  import { getRoleListColumns, getRoleListFormConfig } from './roleData';
+  import { roleListApi } from '/@/api/system/role/role';
 
   export default defineComponent({
     components: { BasicTable },
     setup() {
       const [registerTable] = useTable({
-        title: '登录日志',
-        api: loginLogListApi,
-        columns: getLoginLogColumns(),
+        title: '角色列表',
+        api: roleListApi,
+        columns: getRoleListColumns(),
         useSearchForm: true,
-        formConfig: getLoginLogFormConfig(),
+        formConfig: getRoleListFormConfig(),
         showTableSetting: true,
         showIndexColumn: false,
       });
