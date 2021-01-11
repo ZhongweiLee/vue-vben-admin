@@ -56,10 +56,18 @@ const systemLog: AppRouteModule = {
     },
     {
       path: 'sysuser',
-      name: 'SysUser',
+      name: 'Sysuser',
       component: () => import('/@/views/system/sysuser/SysUserList.vue'),
       meta: {
         title: t('routes.system.sysuser'),
+      },
+    },
+    {
+      path: 'sysuseredit',
+      name: 'Sysuseredit',
+      component: () => import('/@/views/system/sysuser/SysUserEdit.vue'),
+      meta: {
+        title: t('routes.system.sysuseredit'),
       },
     },
     {
