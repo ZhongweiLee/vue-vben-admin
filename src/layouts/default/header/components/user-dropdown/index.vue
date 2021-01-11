@@ -9,8 +9,13 @@
 
     <template #overlay>
       <Menu @click="handleMenuClick">
-        <MenuItem key="doc" :text="t('layout.header.dropdownItemDoc')" icon="gg:loadbar-doc" />
-        <MenuDivider v-if="getShowDoc" />
+        <MenuItem
+          key="doc"
+          :text="t('layout.header.dropdownItemDoc')"
+          icon="gg:loadbar-doc"
+          v-if="getShowDoc"
+        />
+        <MenuDivider />
         <MenuItem
           key="loginOut"
           :text="t('layout.header.dropdownItemLoginOut')"
@@ -99,7 +104,6 @@
   });
 </script>
 <style lang="less">
-  @import (reference) '../../../../../design/index.less';
   @prefix-cls: ~'@{namespace}-header-user-dropdown';
 
   .@{prefix-cls} {
