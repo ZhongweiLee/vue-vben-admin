@@ -23,3 +23,16 @@ export interface DictTypeListItem {
  * @description: 字典
  */
 export type DictTypeGetResultModel = BasicFetchResult<DictTypeListItem>;
+
+/**
+ * 字典数据
+ */
+export interface DictDataOptionsItem {
+  label: string;
+  value: string;
+}
+
+/**
+ * @description: 字段数据
+ */
+export type DictDataOptionsGetResultModel = DictDataOptionsItem[];

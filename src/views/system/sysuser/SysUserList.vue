@@ -1,7 +1,13 @@
 <template>
-  <PageWrapper title="modal组件使用示例">
+  <PageWrapper>
     <BasicTable @register="registerTable">
-      <template #admin="{ record }"> {{ record.status == '0' ? '有效' : '停用' }}</template>
+      <template #status="{ record }">
+        <a-tag v-if="record.status == '1'" color="green"> 正常</a-tag>
+        <a-tag v-if="record.status == '0'" color="red"> 停用</a-tag>
+      </template>
+      <template #avatar="{ record }">
+        <img :src="record.avatar" style="width: 40px; height: 40px;" />
+      </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
@@ -31,7 +37,7 @@
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { PageWrapper } from '/@/components/Page';
   import { getSysUserListColumns, getSysUserListFormConfig } from './sysuserData';
-  import { sysUserListApi } from '/@/api/system/sysuser/sysuser';
+  import { changeSysUserStatuApi, sysUserListApi } from '/@/api/system/sysuser/sysuser';
   import SysUserEdit from './SysUserEdit.vue';
 
   export default defineComponent({
@@ -62,13 +68,15 @@
             username: record.username,
             email: record.email,
             phone: record.phone,
-            nickName: record.nickName,
+            nickname: record.nickname,
           },
           true
         );
       }
       function handleOpen(record: Recordable) {
         console.log('点击了启用', record);
+        var params = { userId: record.userId, status: record.status };
+        changeSysUserStatuApi(params);
       }
 
       return {

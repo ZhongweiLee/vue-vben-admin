@@ -37,5 +37,5 @@ export interface GetUserInfoModel {
   // 用户名
   username: string;
   // 真实名字
-  nickName: string;
+  nickname: string;
 }

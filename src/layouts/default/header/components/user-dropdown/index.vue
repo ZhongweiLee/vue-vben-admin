@@ -3,7 +3,7 @@
     <span :class="[prefixCls, `${prefixCls}--${theme}`]">
       <img :class="`${prefixCls}__header`" src="/@/assets/images/header.jpg" />
       <span :class="`${prefixCls}__info`">
-        <span :class="`${prefixCls}__name anticon`">{{ getUserInfo.nickName }}</span>
+        <span :class="`${prefixCls}__name anticon`">{{ getUserInfo.nickname }}</span>
       </span>
     </span>
 
@@ -68,8 +68,8 @@
       const { getShowDoc } = useHeaderSetting();
 
       const getUserInfo = computed(() => {
-        const { nickName = '' } = userStore.getUserInfoState || {};
-        return { nickName };
+        const { nickname = '' } = userStore.getUserInfoState || {};
+        return { nickname };
       });
 
       //  login out

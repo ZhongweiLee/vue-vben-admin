@@ -1,6 +1,7 @@
 import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import moment from 'moment';
+import { dictDataOptionsApi } from '/@/api/system/dict/dict';
 
 export function getSysUserListColumns(): BasicColumn[] {
   return [
@@ -12,48 +13,50 @@ export function getSysUserListColumns(): BasicColumn[] {
     {
       title: '用户名',
       dataIndex: 'username',
-      width: 50,
+      width: 80,
     },
     {
       title: '姓名',
       width: 100,
-      dataIndex: 'nickName',
+      dataIndex: 'nickname',
     },
     {
       title: '状态',
       dataIndex: 'status',
-      width: 40,
+      width: 60,
       slots: { customRender: 'status' },
     },
     {
       title: '创建时间',
-      width: 120,
+      width: 150,
       dataIndex: 'createdAt',
       customRender: ({ record }) => moment(record.createdAt).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: '手机号',
-      width: 80,
+      width: 100,
       dataIndex: 'phone',
     },
     {
       title: '头像',
-      width: 120,
+      width: 80,
       dataIndex: 'avatar',
+      slots: { customRender: 'avatar' },
     },
     {
       title: '性别',
       width: 40,
       dataIndex: 'sex',
+      customRender: ({ record }) => getSexLabel(record.sex),
     },
     {
       title: '邮箱',
-      width: 100,
+      width: 150,
       dataIndex: 'email',
     },
     {
       title: '部门',
-      width: 50,
+      width: 80,
       dataIndex: 'deptName',
     },
     {
@@ -62,6 +65,16 @@ export function getSysUserListColumns(): BasicColumn[] {
       dataIndex: 'remark',
     },
   ];
+}
+
+export function getSexLabel(sex: string): string {
+  if (sex == 'F') {
+    return '男';
+  } else if (sex == 'M') {
+    return '女';
+  } else {
+    return '未知';
+  }
 }
 
 export function getSysUserListFormConfig(): Partial<FormProps> {
@@ -77,21 +90,12 @@ export function getSysUserListFormConfig(): Partial<FormProps> {
         },
       },
       {
-        field: `status`,
-        label: `状态`,
-        component: 'Select',
+        field: 'status',
+        component: 'ApiSelect',
+        label: '状态',
         defaultValue: '',
         componentProps: {
-          options: [
-            {
-              label: '有效',
-              value: '0',
-            },
-            {
-              label: '失效',
-              value: '1',
-            },
-          ],
+          api: () => dictDataOptionsApi('sys_user_status'),
         },
         colProps: {
           span: 8,

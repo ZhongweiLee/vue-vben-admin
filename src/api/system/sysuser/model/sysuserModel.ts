@@ -6,7 +6,7 @@ export type SysUserListParams = BasicPageParams;
 
 export interface SysUserListItem {
   userId: number;
-  nickName: string;
+  nickname: string;
   phone: string;
   roleId: number;
   avatar: string;
@@ -18,6 +18,14 @@ export interface SysUserListItem {
   remark: string;
   deptName: string;
   postId: number;
+}
+
+export interface SysUserUpdateParams {
+  userId: string;
+  phone: string;
+  username: string;
+  email: string;
+  nickname: string;
 }
 
 /**
