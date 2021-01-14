@@ -1,6 +1,6 @@
 <template>
   <BasicModal v-bind="$attrs" @register="register" title="系统用户添加" @ok="handleSubmit">
-    <BasicForm @register="registerForm" :model="model" @submit="handleSubmit" />
+    <BasicForm :model="model" @register="registerForm" @submit="handleSubmit" />
   </BasicModal>
 </template>
 <script lang="ts">

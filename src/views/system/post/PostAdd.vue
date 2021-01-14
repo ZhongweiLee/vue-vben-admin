@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="register" title="重置用户密码" @ok="handleSubmit">
+  <BasicModal v-bind="$attrs" @register="register" title="系统用户添加" @ok="handleSubmit">
     <BasicForm :model="model" @register="registerForm" @submit="handleSubmit" />
   </BasicModal>
 </template>
@@ -7,46 +7,42 @@
   import { defineComponent, ref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { sysUserResetPasswordApi } from '/@/api/system/sysuser/sysuser';
-  import { SysUserResetPasswordParams } from '/@/api/system/sysuser/model/sysuserModel';
+  import { postAddApi } from '/@/api/system/post/post';
+  import { PostAddParam } from '/@/api/system/post/model/postModel';
+  import { useMessage } from '/@/hooks/web/useMessage';
 
   const schemas: FormSchema[] = [
     {
-      field: 'userId',
+      field: 'postName',
       component: 'Input',
-      label: '用户ID',
+      label: '岗位名称',
       required: true,
-      colProps: {
-        span: 12,
-      },
-      defaultValue: '0',
-      show: false,
-    },
-    {
-      field: 'username',
-      component: 'Input',
-      label: '用户名',
-      required: true,
-      colProps: {
-        span: 12,
-      },
-      componentProps: { disabled: true },
-    },
-    {
-      field: 'nickname',
-      component: 'Input',
-      label: '昵称',
-      required: true,
-      componentProps: { disabled: true },
       colProps: {
         span: 12,
       },
     },
     {
-      field: 'password',
+      field: 'postCode',
       component: 'Input',
-      label: '新密码',
+      label: '岗位简称',
       required: true,
+      colProps: {
+        span: 12,
+      },
+    },
+    {
+      field: 'sort',
+      component: 'InputNumber',
+      label: '排序',
+      required: true,
+      colProps: {
+        span: 12,
+      },
+    },
+    {
+      field: 'remark',
+      component: 'Input',
+      label: '备注',
       colProps: {
         span: 12,
       },
@@ -65,24 +61,25 @@
         },
       });
 
-      const [register, { closeModal }] = useModalInner((data) => {
+      const [register, { closeModal }] = useModalInner(() => {
         setFieldsValue({
-          userId: data.userId,
-          username: data.username,
-          nickname: data.nickname,
-          password: '',
+          postName: '',
+          postCode: '',
+          sort: '',
+          remark: '',
         });
       });
 
       async function handleSubmit() {
         try {
-          const res = (await validateFields()) as SysUserResetPasswordParams;
-          sysUserResetPasswordApi(res).then((val) => {
-            console.log(val);
+          const res = (await validateFields()) as PostAddParam;
+
+          postAddApi(res).then(() => {
+            useMessage().createMessage.info('添加成功');
           });
           closeModal();
         } catch (error) {
-          console.log('not passing', error);
+          useMessage().createMessage.error('出错啦～');
         }
       }
 

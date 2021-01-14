@@ -14,6 +14,12 @@ export interface PostListItem {
   createAt: string;
 }
 
+export interface PostAddParam {
+  postName: string;
+  postCode: string;
+  sort: number;
+  remark: string;
+}
 /**
  * @description: 岗位列表
  */

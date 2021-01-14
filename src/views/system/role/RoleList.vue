@@ -1,6 +1,8 @@
 <template>
   <BasicTable @register="registerTable">
-    <template #admin="{ record }"> {{ record.admin ? '是' : '否' }}</template>
+    <template #admin="{ record }">
+      {{ record.admin ? '是' : '否' }}
+    </template>
   </BasicTable>
 </template>
 <script lang="ts">
