@@ -1,8 +1,13 @@
 import { defHttp } from '/@/utils/http/axios';
-import { DeptListParams, DeptListGetResultModel } from './model/deptModel';
+import {
+  DeptListParams,
+  DeptListGetResultModel,
+  DeptOptionsGetResultModel,
+} from './model/deptModel';
 
 enum Api {
-  deptListUri = '/dept/list',
+  deptListUri = '/dept/getDeptlist',
+  deptOptionUri = '/dept/deptOptions',
 }
 
 /**
@@ -13,6 +18,19 @@ export function deptListApi(params: DeptListParams) {
     url: Api.deptListUri,
     method: 'GET',
     params,
+    headers: {
+      ignoreCancelToken: true,
+    },
+  });
+}
+
+/**
+ * 部门下拉
+ */
+export function deptOptionsApi() {
+  return defHttp.request<DeptOptionsGetResultModel>({
+    url: Api.deptOptionUri,
+    method: 'GET',
     headers: {
       ignoreCancelToken: true,
     },

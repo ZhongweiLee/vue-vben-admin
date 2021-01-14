@@ -68,9 +68,9 @@ export function getSysUserListColumns(): BasicColumn[] {
 }
 
 export function getSexLabel(sex: string): string {
-  if (sex == 'F') {
+  if (sex == 'M') {
     return '男';
-  } else if (sex == 'M') {
+  } else if (sex == 'F') {
     return '女';
   } else {
     return '未知';

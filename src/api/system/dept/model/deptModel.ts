@@ -21,3 +21,17 @@ export interface DeptListItem {
  * @description: 部门
  */
 export type DeptListGetResultModel = DeptListItem[];
+
+/**
+ * 部门下拉数据
+ */
+export interface DeptOptionsItem {
+  label: string;
+  value: string;
+  children?: DeptOptionsItem[];
+}
+
+/**
+ * @description: 部门下拉数据
+ */
+export type DeptOptionsGetResultModel = DeptOptionsItem[];

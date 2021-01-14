@@ -26,6 +26,27 @@ export interface SysUserUpdateParams {
   username: string;
   email: string;
   nickname: string;
+  postId: string;
+  remark: string;
+  sex: string;
+  deptId: string;
+}
+
+export interface SysUserAddParams {
+  password: string;
+  phone: string;
+  username: string;
+  email: string;
+  nickname: string;
+  postId: string;
+  remark: string;
+  sex: string;
+  deptId: string;
+}
+
+export interface SysUserResetPasswordParams {
+  userId: string;
+  password: string;
 }
 
 /**

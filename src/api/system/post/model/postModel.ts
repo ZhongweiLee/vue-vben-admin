@@ -18,3 +18,16 @@ export interface PostListItem {
  * @description: 岗位列表
  */
 export type PostListGetResultModel = BasicFetchResult<PostListItem>;
+
+/**
+ * 岗位下拉数据
+ */
+export interface PostOptionsItem {
+  label: string;
+  value: string;
+}
+
+/**
+ * @description: 岗位下拉数据
+ */
+export type PostOptionsGetResultModel = PostOptionsItem[];

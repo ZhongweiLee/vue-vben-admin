@@ -40,7 +40,7 @@
       const { prefixCls } = useDesign('header-lock-modal');
 
       const getRealName = computed(() => {
-        return userStore.getUserInfoState?.realName;
+        return userStore.getUserInfoState?.nickname;
       });
       const [register, { closeModal }] = useModalInner();
 
