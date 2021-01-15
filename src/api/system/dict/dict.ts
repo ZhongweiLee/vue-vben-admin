@@ -10,7 +10,7 @@ import {
 enum Api {
   dictTypeListUri = '/dict/typelist',
   dictDataOptionsUri = '/dict/datalist/options/',
-  dictTypeUri = '/dict/type/',
+  dictTypeUri = '/dict/type',
 }
 
 /**
@@ -40,7 +40,7 @@ export function dictTypeAddApi(params: DictTypeAddParam) {
 
 export function dictTypeDeleteApi(dictId: number) {
   return defHttp.request<DictTypeListItem>({
-    url: Api.dictTypeUri + dictId,
+    url: Api.dictTypeUri + '/' + dictId,
     method: 'DELETE',
     headers: {
       ignoreCancelToken: true,
