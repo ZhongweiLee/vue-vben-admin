@@ -2,8 +2,8 @@
   <PageWrapper>
     <BasicTable @register="registerTable">
       <template #status="{ record }">
-        <a-tag v-if="record.status == '1'" color="green"> 正常</a-tag>
-        <a-tag v-if="record.status == '0'" color="red"> 停用</a-tag>
+        <a-tag v-if="record.status == '1'" color="green"> 正常 </a-tag>
+        <a-tag v-if="record.status == '0'" color="red"> 停用 </a-tag>
       </template>
       <template #avatar="{ record }">
         <img
@@ -25,7 +25,7 @@
               onClick: handleEdit.bind(null, record),
             },
           ]"
-          :dropDownActions="[
+          :drop-down-actions="[
             {
               label: record.status == '0' ? '启用' : '停用',
               onClick: handleOpen.bind(null, record),
@@ -115,7 +115,6 @@
       }
 
       function handleOpen(record: Recordable) {
-        console.log('点击了启用', record);
         var params = { userId: record.userId, status: record.status };
         changeSysUserStatuApi(params);
       }

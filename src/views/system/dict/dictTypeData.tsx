@@ -1,6 +1,8 @@
 import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import moment from 'moment';
+import { dictDataOptionsApi } from '/@/api/system/dict/dict';
+import { Tag } from 'ant-design-vue';
 
 export function getDictTypeColumns(): BasicColumn[] {
   return [
@@ -23,6 +25,11 @@ export function getDictTypeColumns(): BasicColumn[] {
       title: '状态',
       dataIndex: 'status',
       width: 40,
+      customRender: ({ record }) => {
+        const color = record.status === '1' ? 'green' : 'red';
+        const text = record.status === '1' ? '正常' : '失效';
+        return <Tag color={color}>{() => text}</Tag>;
+      },
     },
     {
       title: '备注',
@@ -64,29 +71,12 @@ export function getDictTypeFormConfig(): Partial<FormProps> {
         },
       },
       {
-        field: `dictId`,
-        label: `ID`,
-        component: 'Input',
-        colProps: {
-          span: 8,
-        },
-      },
-      {
         field: `status`,
         label: `状态`,
-        component: 'Select',
+        component: 'ApiSelect',
         defaultValue: '',
         componentProps: {
-          options: [
-            {
-              label: '有效',
-              value: '0',
-            },
-            {
-              label: '失效',
-              value: '1',
-            },
-          ],
+          api: () => dictDataOptionsApi('sys_common_status'),
         },
         colProps: {
           span: 8,

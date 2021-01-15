@@ -19,6 +19,12 @@ export interface DictTypeListItem {
   params: string;
 }
 
+export interface DictTypeAddParam {
+  dictName: string;
+  dictType: string;
+  remark: string;
+}
+
 /**
  * @description: 字典
  */
