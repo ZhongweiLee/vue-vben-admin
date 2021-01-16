@@ -8,38 +8,39 @@
               label: '删除',
               icon: 'ic:outline-delete',
               onClick: handleDelete.bind(null, record),
+              disabled: record.status != '1',
             },
           ]"
         />
       </template>
       <template #toolbar>
-        <a-button type="primary" @click="handleAdd"> 添加字典 </a-button>
+        <a-button type="primary" @click="handleAdd"> 添加字典数据 </a-button>
       </template>
     </BasicTable>
-    <TypeAdd @register="registerAdd" />
+    <DictDataAdd @register="registerAdd" />
   </PageWrapper>
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
+  import { PageWrapper } from '/@/components/Page';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { PageWrapper } from '/@/components/Page';
   import { useMessage } from '/@/hooks/web/useMessage';
 
-  import { getDictTypeColumns, getDictTypeFormConfig } from './dictTypeData';
-  import { dictTypeDeleteApi, dictTypeListApi } from '/@/api/system/dict/dict';
+  import { getDictDataColumns, getDictDataFormConfig } from './dictDataListData';
+  import { dictDataDeleteApi, dictDataListApi } from '/@/api/system/dict/dict';
 
-  import TypeAdd from './TypeAdd.vue';
+  import DictDataAdd from './DictDataAdd.vue';
 
   export default defineComponent({
-    components: { BasicTable, TableAction, PageWrapper, TypeAdd },
+    components: { BasicTable, TableAction, PageWrapper, DictDataAdd },
     setup() {
       const [registerTable, { reload }] = useTable({
-        title: '字典列表',
-        api: dictTypeListApi,
-        columns: getDictTypeColumns(),
+        title: '字典数据',
+        api: dictDataListApi,
+        columns: getDictDataColumns(),
         useSearchForm: true,
-        formConfig: getDictTypeFormConfig(),
+        formConfig: getDictDataFormConfig(),
         showTableSetting: true,
         showIndexColumn: false,
         actionColumn: {
@@ -52,15 +53,13 @@
 
       function handleDelete(record: Recordable) {
         try {
-          dictTypeDeleteApi(record.dictId).then(() => {
+          dictDataDeleteApi(record.id).then(() => {
             useMessage().createMessage.info('删除成功');
             reload();
           });
         } catch (error) {}
       }
-
       const [registerAdd, { openModal: openModalAdd }] = useModal();
-
       function handleAdd() {
         console.log('click add....');
         openModalAdd(true, {}, true);

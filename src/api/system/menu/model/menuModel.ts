@@ -14,9 +14,13 @@ export interface MenuListItem {
   metaTitle: string;
   sort: number;
   parentId: number;
-  state: number;
-  createTime: string;
+  status: string;
+  createdAt: string;
+  metaHidemenu: boolean;
+  metaHideTab: boolean;
+  MetaCurrentActiveMenu: string;
   children?: MenuListItem[];
+  parentName: string;
 }
 
 /**

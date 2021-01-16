@@ -1,34 +1,11 @@
-import { BasicPageParams, BasicFetchResult } from '/@/api/model/baseModel';
-/**
- * @description: 字典
- */
-export type DictTypeListParams = BasicPageParams;
+import { BasicFetchResult } from '/@/api/model/baseModel';
 
-export interface DictTypeListItem {
-  dictId: number;
-  dictName: string;
+export interface DictDataAddParam {
   dictType: string;
-  status: string;
-  createBy: string;
-  updataBy: string;
-  remark: string;
-  createAt: string;
-  updateAt: string;
-  deleteAt: string;
-  dataScope: string;
-  params: string;
-}
-
-export interface DictTypeAddParam {
-  dictName: string;
-  dictType: string;
+  dictLabel: string;
+  dictValue: string;
   remark: string;
 }
-
-/**
- * @description: 字典
- */
-export type DictTypeGetResultModel = BasicFetchResult<DictTypeListItem>;
 
 /**
  * 字典数据
@@ -42,3 +19,18 @@ export interface DictDataOptionsItem {
  * @description: 字段数据
  */
 export type DictDataOptionsGetResultModel = DictDataOptionsItem[];
+
+export interface DictDataItem {
+  id: number;
+  dictSort: number;
+  dictLabel: string;
+  dictValue: string;
+  dictType: string;
+  status: string;
+  remark: string;
+  createAt: string;
+  updateAt: string;
+  deleteAt: string;
+}
+
+export type DictDataListGetResultModel = BasicFetchResult<DictDataItem>;

@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="register" title="字典类型添加" @ok="handleSubmit">
+  <BasicModal v-bind="$attrs" @register="register" title="添加字典数据" @ok="handleSubmit">
     <BasicForm :model="model" @register="registerForm" @submit="handleSubmit" />
   </BasicModal>
 </template>
@@ -8,28 +8,34 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { dictTypeAddApi } from '/@/api/system/dict/dict';
-  import { DictTypeAddParam } from '/@/api/system/dict/model/dictModel';
+  import { dictDataAddApi } from '/@/api/system/dict/dict';
+  import { DictDataItem } from '/@/api/system/dict/model/dictModel';
 
   const schemas: FormSchema[] = [
-    {
-      field: 'dictName',
-      component: 'Input',
-      label: '字典名称',
-      required: true,
-      colProps: {
-        span: 12,
-      },
-    },
     {
       field: 'dictType',
       component: 'Input',
       label: '字典编码',
       required: true,
+      colProps: { span: 12 },
+    },
+    {
+      field: 'dictLabel',
+      component: 'Input',
+      label: '选项名称',
+      required: true,
       colProps: {
         span: 12,
       },
     },
+    {
+      field: 'dictValue',
+      component: 'Input',
+      label: '选项值',
+      required: true,
+      colProps: { span: 12 },
+    },
+
     {
       field: 'remark',
       component: 'Input',
@@ -54,17 +60,18 @@
 
       const [register, { closeModal }] = useModalInner(() => {
         setFieldsValue({
-          dictName: '',
           dictType: '',
+          dictLabel: '',
+          dictValue: '',
           remark: '',
         });
       });
 
       async function handleSubmit() {
         try {
-          const res = (await validateFields()) as DictTypeAddParam;
+          const res = (await validateFields()) as DictDataItem;
 
-          dictTypeAddApi(res).then(() => {
+          dictDataAddApi(res).then(() => {
             useMessage().createMessage.info('添加成功');
           });
           closeModal();

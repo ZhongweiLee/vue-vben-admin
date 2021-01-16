@@ -4,27 +4,32 @@ import moment from 'moment';
 import { dictDataOptionsApi } from '/@/api/system/dict/dict';
 import { Tag } from 'ant-design-vue';
 
-export function getDictTypeColumns(): BasicColumn[] {
+export function getDictDataColumns(): BasicColumn[] {
   return [
     {
       title: 'ID',
-      dataIndex: 'dictId',
+      dataIndex: 'id',
       width: 40,
     },
     {
+      title: '字典编码',
+      width: 120,
+      dataIndex: 'dictType',
+    },
+    {
       title: '名称',
-      dataIndex: 'dictName',
+      dataIndex: 'dictLabel',
       width: 50,
     },
     {
-      title: '编码',
+      title: '值',
       width: 100,
-      dataIndex: 'dictType',
+      dataIndex: 'dictValue',
     },
     {
       title: '状态',
       dataIndex: 'status',
-      width: 40,
+      width: 50,
       customRender: ({ record }) => {
         const color = record.status === '1' ? 'green' : 'red';
         const text = record.status === '1' ? '正常' : '失效';
@@ -50,31 +55,24 @@ export function getDictTypeColumns(): BasicColumn[] {
   ];
 }
 
-export function getDictTypeFormConfig(): Partial<FormProps> {
+export function getDictDataFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
     schemas: [
       {
-        field: `dictName`,
-        label: `名称`,
-        component: 'Input',
-        colProps: {
-          span: 8,
-        },
-      },
-      {
         field: `dictType`,
-        label: `编码`,
+        label: `字典编码`,
         component: 'Input',
         colProps: {
           span: 8,
         },
+        // defaultValue: dictType,
       },
       {
         field: `status`,
         label: `状态`,
         component: 'ApiSelect',
-        defaultValue: '',
+        defaultValue: '1',
         componentProps: {
           api: () => dictDataOptionsApi('sys_common_status'),
         },

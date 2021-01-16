@@ -83,7 +83,7 @@ export function getPostListFormConfig(): Partial<FormProps> {
         field: `status`,
         label: `状态`,
         component: 'ApiSelect',
-        defaultValue: '',
+        defaultValue: '1',
         componentProps: {
           api: () => dictDataOptionsApi('sys_common_status'),
         },

@@ -93,7 +93,7 @@ export function getSysUserListFormConfig(): Partial<FormProps> {
         field: 'status',
         component: 'ApiSelect',
         label: '状态',
-        defaultValue: '',
+        defaultValue: '1',
         componentProps: {
           api: () => dictDataOptionsApi('sys_user_status'),
         },

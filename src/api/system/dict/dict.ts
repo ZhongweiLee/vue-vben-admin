@@ -1,35 +1,44 @@
 import { defHttp } from '/@/utils/http/axios';
 import {
+  DictDataAddParam,
+  DictDataItem,
+  DictDataListGetResultModel,
   DictDataOptionsGetResultModel,
-  DictTypeAddParam,
-  DictTypeGetResultModel,
-  DictTypeListItem,
-  DictTypeListParams,
 } from './model/dictModel';
+import { BasicPageParams } from '../../model/baseModel';
 
 enum Api {
-  dictTypeListUri = '/dict/typelist',
-  dictDataOptionsUri = '/dict/datalist/options/',
-  dictTypeUri = '/dict/type',
+  dictDataOptionsUri = '/dict/options/',
+  dictDataListUri = '/dict/data/getDictDataList',
+  dictDataUri = '/dict',
+  dictDataDeleteUril = '/dict/deleteDictData/',
 }
 
-/**
- * @description: Get dict type list
- */
-export function dictTypeListApi(params: DictTypeListParams) {
-  return defHttp.request<DictTypeGetResultModel>({
-    url: Api.dictTypeListUri,
+export function dictDataOptionsApi(dictType: string) {
+  return defHttp.request<DictDataOptionsGetResultModel>({
+    url: Api.dictDataOptionsUri,
     method: 'GET',
-    params,
+    params: dictType,
     headers: {
       ignoreCancelToken: true,
     },
   });
 }
 
-export function dictTypeAddApi(params: DictTypeAddParam) {
-  return defHttp.request<DictTypeListItem>({
-    url: Api.dictTypeUri,
+export function dictDataListApi(params: BasicPageParams) {
+  return defHttp.request<DictDataListGetResultModel>({
+    url: Api.dictDataListUri,
+    method: 'GET',
+    params: params,
+    headers: {
+      ignoreCancelToken: true,
+    },
+  });
+}
+
+export function dictDataAddApi(params: DictDataAddParam) {
+  return defHttp.request<DictDataItem>({
+    url: Api.dictDataUri,
     method: 'POST',
     params,
     headers: {
@@ -38,21 +47,10 @@ export function dictTypeAddApi(params: DictTypeAddParam) {
   });
 }
 
-export function dictTypeDeleteApi(dictId: number) {
-  return defHttp.request<DictTypeListItem>({
-    url: Api.dictTypeUri + '/' + dictId,
+export function dictDataDeleteApi(id: number) {
+  return defHttp.request<DictDataItem>({
+    url: Api.dictDataDeleteUril + id,
     method: 'DELETE',
-    headers: {
-      ignoreCancelToken: true,
-    },
-  });
-}
-
-export function dictDataOptionsApi(dictType: string) {
-  return defHttp.request<DictDataOptionsGetResultModel>({
-    url: Api.dictDataOptionsUri,
-    method: 'GET',
-    params: dictType,
     headers: {
       ignoreCancelToken: true,
     },
