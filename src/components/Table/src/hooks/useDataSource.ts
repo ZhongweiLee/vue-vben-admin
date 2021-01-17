@@ -186,7 +186,8 @@ export function useDataSource(
         setPagination({
           current: currentTotalPage,
         });
-        fetch(opt);
+        //暂时关闭掉重试，使用表格不使用分页时，出现死循环请求接口
+        //fetch(opt);
       }
 
       if (afterFetch && isFunction(afterFetch)) {

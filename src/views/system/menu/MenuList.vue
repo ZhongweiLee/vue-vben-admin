@@ -62,6 +62,7 @@
           dataIndex: 'action',
           slots: { customRender: 'action' },
         },
+        pagination: false,
       });
 
       const [registerMenuAddDrawer, { openDrawer: openAddDrawer }] = useDrawer();

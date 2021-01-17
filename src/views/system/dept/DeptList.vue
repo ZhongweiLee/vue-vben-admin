@@ -19,6 +19,7 @@
         rowKey: 'deptId',
         isTreeTable: true,
         indentSize: 20,
+        pagination: false,
       });
       return {
         registerTable,
