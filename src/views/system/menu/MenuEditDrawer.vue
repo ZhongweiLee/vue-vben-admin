@@ -1,7 +1,7 @@
 <template>
   <BasicDrawer
     v-bind="$attrs"
-    title="添加菜单"
+    title="修改菜单"
     width="60%"
     show-footer
     @register="register"
@@ -14,13 +14,30 @@
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { menuAddApi, menuGetDirOptionApi } from '/@/api/system/menu/menu';
+  import {
+    menuAddApi,
+    menuEditApi,
+    menuGetByIdApi,
+    menuGetDirOptionApi,
+  } from '/@/api/system/menu/menu';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { useMessage } from '/@/hooks/web/useMessage';
 
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { MenuAddParam } from '/@/api/system/menu/model/menuModel';
+  import { dictDataOptionsApi } from '/@/api/system/dict/dict';
+  import { MenuEditParam, MenuListItem } from '/@/api/system/menu/model/menuModel';
+
   const schemas: FormSchema[] = [
+    {
+      field: 'id',
+      component: 'Input',
+      label: 'id',
+      colProps: { span: 12 },
+      componentProps: {
+        placeholder: 'bx:bxs-user',
+      },
+      show: false,
+    },
     {
       field: 'menuType',
       component: 'RadioButtonGroup',
@@ -54,7 +71,6 @@
       colProps: { span: 12 },
       componentProps: { placeholder: 'bx:bxs-user' },
     },
-
     {
       field: 'name',
       component: 'Input',
@@ -83,7 +99,6 @@
         return values.menuType == '1';
       },
     },
-
     {
       field: 'redirect',
       component: 'Input',
@@ -95,38 +110,26 @@
       },
     },
     {
-      field: 'isRoot',
-      component: 'RadioGroup',
-      label: '是否是一级',
-      colProps: { span: 24 },
-      componentProps: {
-        options: [
-          { label: '是', value: '1' },
-          { label: '否', value: '0' },
-        ],
-      },
-      required: true,
-    },
-
-    {
       field: 'parentId',
       component: 'ApiSelect',
       label: '父级目录',
-      defaultValue: '1',
+      defaultValue: '',
       colProps: { span: 24 },
-      required: ({ values }) => {
-        return values.isRoot == '0';
-      },
-      show: ({ values }) => {
-        return values.isRoot == '0';
-      },
-      componentProps: { api: () => menuGetDirOptionApi() },
+      componentProps: { api: () => menuGetDirOptionApi(), placeholder: '不选择则为一级菜单' },
     },
     {
       field: 'sort',
       component: 'Input',
       label: '排序',
       colProps: { span: 12 },
+      required: true,
+    },
+    {
+      field: 'status',
+      component: 'ApiSelect',
+      label: '状态',
+      colProps: { span: 12 },
+      componentProps: { api: () => dictDataOptionsApi('sys_common_status') },
       required: true,
     },
   ];
@@ -142,21 +145,49 @@
         },
       });
       const [register, { closeDrawer }] = useDrawerInner((data) => {
-        // 清空表单
-        setFieldsValue({});
+        //请求接口查询详情
+        menuGetByIdApi(data.id).then((res) => {
+          //设置表单
+          setFieldsValue({
+            metaTitle: res.metaTitle,
+            component: res.component,
+            id: data.id,
+            metaIcon: res.metaIcon,
+            name: res.name,
+            parentId: res.parentId == 0 ? '' : res.parentId.toString(),
+            path: res.path,
+            redirect: res.redirect,
+            sort: res.sort,
+            status: res.status,
+            menuType:
+              res.component == 'LAYOUT'
+                ? '2'
+                : res.component == ''
+                ? '2'
+                : res.component == null
+                ? '2'
+                : '1',
+          });
+        });
       });
       async function handleOk() {
         try {
-          const res = (await validateFields()) as MenuAddParam;
-          menuAddApi(res).then(() => {
+          const res = (await validateFields()) as MenuEditParam;
+          menuEditApi(res).then(() => {
             closeDrawer();
-            useMessage().createMessage.info('添加成功');
+            useMessage().createMessage.info('修改成功');
           });
         } catch (error) {
           useMessage().createMessage.error('出错啦～');
         }
       }
-      return { register, schemas, registerForm, handleOk, closeDrawer };
+      return {
+        register,
+        schemas,
+        registerForm,
+        handleOk,
+        closeDrawer,
+      };
     },
   });
 </script>

@@ -142,12 +142,12 @@
           const res = (await validateFields()) as SysUserUpdateParams;
           //const v = getFieldsValue();
           sysUserUpdateApi(res).then((val) => {
-            console.log(val);
+            //console.log(val);
           });
           //createMessage.success('click search,values:' + JSON.stringify(v));
           closeModal();
         } catch (error) {
-          console.log('not passing', error);
+          console.warn('not passing', error);
         }
       }
 

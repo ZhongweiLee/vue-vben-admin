@@ -135,12 +135,12 @@
           const res = (await validateFields()) as SysUserAddParams;
           //const v = getFieldsValue();
           sysUserAddApi(res).then((val) => {
-            console.log(val);
+            //console.log(val);
           });
           //createMessage.success('click search,values:' + JSON.stringify(v));
           closeModal();
         } catch (error) {
-          console.log('not passing', error);
+          console.warn('not passing', error);
         }
       }
 

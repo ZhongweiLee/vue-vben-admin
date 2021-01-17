@@ -78,11 +78,11 @@
         try {
           const res = (await validateFields()) as SysUserResetPasswordParams;
           sysUserResetPasswordApi(res).then((val) => {
-            console.log(val);
+            //console.log(val);
           });
           closeModal();
         } catch (error) {
-          console.log('not passing', error);
+          console.warn('not passing', error);
         }
       }
 

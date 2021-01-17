@@ -61,7 +61,6 @@
       }
       const [registerAdd, { openModal: openModalAdd }] = useModal();
       function handleAdd() {
-        console.log('click add....');
         openModalAdd(true, {}, true);
       }
 

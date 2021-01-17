@@ -47,3 +47,15 @@ export interface MenuDirOptionsItem {
 }
 
 export type MenuDirOptionsGetResultModel = MenuDirOptionsItem[];
+
+export interface MenuEditParam {
+  id: string;
+  path: string;
+  metaTitle: string;
+  component: string;
+  redirect: string;
+  metaIcon: string;
+  sort: string;
+  parentId: string;
+  menuTye: string;
+}
