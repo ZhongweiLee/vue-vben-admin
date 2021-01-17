@@ -1,6 +1,7 @@
 import { defHttp } from '/@/utils/http/axios';
 import {
   MenuAddParam,
+  MenuDirOptionsGetResultModel,
   MenuListGetResultModel,
   MenuListItem,
   MenuListParams,
@@ -9,6 +10,7 @@ import {
 enum Api {
   menuListUri = '/menu/list',
   menuAddUri = '/menu/addMenu',
+  menuDirOptionUri = '/menu/getMenuDirOption',
 }
 
 /**
@@ -30,6 +32,15 @@ export function menuAddApi(params: MenuAddParam) {
     url: Api.menuAddUri,
     method: 'POST',
     params: params,
+    headers: {
+      ignoreCancelToken: true,
+    },
+  });
+}
+export function menuGetDirOptionApi() {
+  return defHttp.request<MenuDirOptionsGetResultModel>({
+    url: Api.menuDirOptionUri,
+    method: 'GET',
     headers: {
       ignoreCancelToken: true,
     },

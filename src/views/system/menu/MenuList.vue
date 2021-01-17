@@ -45,7 +45,8 @@
 
       function handleAdd() {
         console.log('click add');
-        openAddDrawer(true, { data: 'content', info: 'Info' });
+        //openAddDrawer(true, { data: 'content', info: 'Info' });
+        openAddDrawer(true, {});
       }
 
       return {

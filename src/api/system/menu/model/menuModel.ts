@@ -40,3 +40,10 @@ export interface MenuAddParam {
   isRoot: string;
   menuTye: string;
 }
+
+export interface MenuDirOptionsItem {
+  label: string;
+  value: string;
+}
+
+export type MenuDirOptionsGetResultModel = MenuDirOptionsItem[];

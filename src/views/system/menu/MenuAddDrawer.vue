@@ -14,7 +14,7 @@
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { menuAddApi } from '/@/api/system/menu/menu';
+  import { menuAddApi, menuGetDirOptionApi } from '/@/api/system/menu/menu';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { useMessage } from '/@/hooks/web/useMessage';
 
@@ -76,35 +76,27 @@
       field: 'component',
       component: 'Input',
       label: '组件',
-      colProps: { span: 12 },
+      colProps: { span: 24 },
       componentProps: { placeholder: '/system/sysuser/SysUserList' },
+      show: ({ values }) => {
+        return values.menuType == '1';
+      },
     },
 
     {
       field: 'redirect',
       component: 'Input',
       label: '跳转',
-      colProps: { span: 12 },
+      colProps: { span: 24 },
       componentProps: { placeholder: '/permission/front/page' },
-    },
-    {
-      field: 'parentId',
-      component: 'Input',
-      label: '父节点ID',
-      colProps: { span: 12 },
-      required: true,
-    },
-    {
-      field: 'sort',
-      component: 'Input',
-      label: '排序',
-      colProps: { span: 12 },
-      required: true,
+      show: ({ values }) => {
+        return values.menuType == '2';
+      },
     },
     {
       field: 'isRoot',
       component: 'RadioGroup',
-      label: '一级菜单',
+      label: '是否是一级',
       colProps: { span: 24 },
       componentProps: {
         options: [
@@ -112,6 +104,29 @@
           { label: '否', value: '0' },
         ],
       },
+      required: true,
+    },
+
+    {
+      field: 'parentId',
+      component: 'ApiSelect',
+      label: '父级目录',
+      defaultValue: '1',
+      colProps: { span: 24 },
+      required: ({ values }) => {
+        return values.isRoot == '0';
+      },
+      show: ({ values }) => {
+        return values.isRoot == '0';
+      },
+      componentProps: { api: () => menuGetDirOptionApi() },
+    },
+    {
+      field: 'sort',
+      component: 'Input',
+      label: '排序',
+      colProps: { span: 12 },
+      required: true,
     },
   ];
   export default defineComponent({
@@ -126,11 +141,8 @@
         },
       });
       const [register, { closeDrawer }] = useDrawerInner((data) => {
-        // 方式1
-        setFieldsValue({
-          field2: data.data,
-          field1: data.info,
-        });
+        // 清空表单
+        setFieldsValue({});
       });
       async function handleOk() {
         console.log('click ok');
