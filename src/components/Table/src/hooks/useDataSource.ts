@@ -181,13 +181,14 @@ export function useDataSource(
       const resultTotal: number = isArrayResult ? 0 : get(res, totalField);
 
       // 假如数据变少，导致总页数变少并小于当前选中页码，通过getPaginationRef获取到的页码是不正确的，需获取正确的页码再次执行
-      const currentTotalPage = Math.ceil(resultTotal / pageSize);
-      if (current > currentTotalPage) {
-        setPagination({
-          current: currentTotalPage,
-        });
-        //暂时关闭掉重试，使用表格不使用分页时，出现死循环请求接口
-        //fetch(opt);
+      if (resultTotal) {
+        const currentTotalPage = Math.ceil(resultTotal / pageSize);
+        if (current > currentTotalPage) {
+          setPagination({
+            current: currentTotalPage,
+          });
+          fetch(opt);
+        }
       }
 
       if (afterFetch && isFunction(afterFetch)) {
