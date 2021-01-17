@@ -27,3 +27,16 @@ export interface MenuListItem {
  * @description: 菜单管理
  */
 export type MenuListGetResultModel = MenuListItem[];
+
+export interface MenuAddParam {
+  name: string;
+  path: string;
+  metaTitle: string;
+  component: string;
+  redirect: string;
+  metaIcon: string;
+  sort: string;
+  parentId: string;
+  isRoot: string;
+  menuTye: string;
+}
