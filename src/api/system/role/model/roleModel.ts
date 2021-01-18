@@ -28,3 +28,23 @@ export interface RoleAddParam {
   admin: string;
   menus: string;
 }
+
+export interface RoleDetail {
+  roleId: number;
+  roleName: string;
+  status: string;
+  roleKey: string;
+  roleSort: number;
+  remark: string;
+  admin: boolean;
+  menuIds: number[];
+}
+
+export interface RoleEditParam {
+  roleId: string;
+  roleKey: string;
+  roleSort: string;
+  remark: string;
+  admin: string;
+  menus: string;
+}

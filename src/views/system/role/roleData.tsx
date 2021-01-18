@@ -2,6 +2,7 @@ import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import moment from 'moment';
 import { Tag } from 'ant-design-vue';
+import { dictDataOptionsApi } from '/@/api/system/dict/dict';
 
 export function getRoleListColumns(): BasicColumn[] {
   return [
@@ -73,19 +74,10 @@ export function getRoleListFormConfig(): Partial<FormProps> {
       {
         field: `status`,
         label: `状态`,
-        component: 'Select',
+        component: 'ApiSelect',
         defaultValue: '',
         componentProps: {
-          options: [
-            {
-              label: '有效',
-              value: '0',
-            },
-            {
-              label: '失效',
-              value: '1',
-            },
-          ],
+          api: () => dictDataOptionsApi('sys_common_status'),
         },
         colProps: {
           span: 8,

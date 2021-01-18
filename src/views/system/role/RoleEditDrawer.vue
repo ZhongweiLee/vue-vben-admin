@@ -1,7 +1,7 @@
 <template>
   <BasicDrawer
     v-bind="$attrs"
-    title="添加角色"
+    title="修改角色"
     width="60%"
     show-footer
     @register="register"
@@ -19,15 +19,24 @@
   import { defineComponent, ref, unref } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { CollapseContainer } from '/@/components/Container/index';
-  import { BasicTree, TreeActionType, TreeItem } from '/@/components/Tree/index';
+  import { BasicTree, Keys, TreeActionType, TreeItem } from '/@/components/Tree/index';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
   import { useMessage } from '/@/hooks/web/useMessage';
 
   import { RoleAddParam } from '/@/api/system/role/model/roleModel';
   import { menuOptionTreeApi } from '/@/api/system/menu/menu';
-  import { roleAddApi } from '/@/api/system/role/role';
+  import { roleEditApi, roleGetByIdApi } from '/@/api/system/role/role';
 
   const schemas: FormSchema[] = [
+    {
+      field: 'roleId',
+      component: 'Input',
+      label: '角色ID',
+      colProps: { span: 12 },
+      required: true,
+      show: false,
+    },
+
     {
       field: 'roleName',
       component: 'Input',
@@ -35,7 +44,6 @@
       colProps: {
         span: 12,
       },
-      defaultValue: '',
       required: true,
     },
     {
@@ -105,8 +113,29 @@
       }
 
       const [register, { closeDrawer }] = useDrawerInner((data) => {
-        // 清空表单
-        setFieldsValue({});
+        //查询角色详情
+        roleGetByIdApi(data.roleId).then((val) => {
+          //设置勾选数据
+          var selectKeys: Keys = [];
+
+          if (val.menuIds != null) {
+            val.menuIds.forEach((element) => {
+              selectKeys.push(element.toString());
+            });
+            getTree().setCheckedKeys(selectKeys);
+          }
+
+          //设置表单
+          setFieldsValue({
+            roleId: val.roleId,
+            roleName: val.roleName,
+            status: val.status,
+            roleKey: val.roleKey,
+            roleSort: val.roleSort,
+            remark: val.remark,
+            admin: val.admin ? '1' : '0',
+          });
+        });
       });
       async function handleOk() {
         try {
@@ -115,9 +144,9 @@
 
           const res = (await validateFields()) as RoleAddParam;
           res.menus = keys;
-          roleAddApi(res).then(() => {
+          roleEditApi(res).then(() => {
             closeDrawer();
-            useMessage().createMessage.info('角色添加成功');
+            useMessage().createMessage.info('角色修改成功');
           });
         } catch (error) {
           console.warn(error);

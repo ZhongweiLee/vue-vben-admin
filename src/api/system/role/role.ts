@@ -1,6 +1,8 @@
 import { defHttp } from '/@/utils/http/axios';
 import {
   RoleAddParam,
+  RoleDetail,
+  RoleEditParam,
   RoleListGetResultModel,
   RoleListItem,
   RoleListParams,
@@ -9,6 +11,8 @@ import {
 enum Api {
   roleListUri = '/role/getRoleList',
   roleAddUri = '/role/addRole',
+  roleGetUri = '/role/getRoleById',
+  roleEditUri = '/role',
 }
 
 /**
@@ -30,6 +34,37 @@ export function roleAddApi(params: RoleAddParam) {
     url: Api.roleAddUri,
     method: 'POST',
     params,
+    headers: {
+      ignoreCancelToken: true,
+    },
+  });
+}
+
+export function roleGetByIdApi(roleId: number | string) {
+  return defHttp.request<RoleDetail>({
+    url: Api.roleGetUri + '?roleId=' + roleId,
+    method: 'GET',
+    headers: {
+      ignoreCancelToken: true,
+    },
+  });
+}
+
+export function roleEditApi(params: RoleEditParam) {
+  return defHttp.request<RoleListItem>({
+    url: Api.roleEditUri,
+    method: 'PUT',
+    params,
+    headers: {
+      ignoreCancelToken: true,
+    },
+  });
+}
+
+export function roleDeleteApi(roleId: number | string) {
+  return defHttp.request<RoleListItem>({
+    url: Api.roleEditUri + '/' + roleId,
+    method: 'DELETE',
     headers: {
       ignoreCancelToken: true,
     },
