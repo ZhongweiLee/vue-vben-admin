@@ -1,10 +1,6 @@
 <template>
   <PageWrapper>
     <BasicTable @register="registerTable">
-      <template #metaTitle="{ record }">
-        <span v-if="record.parentId != 0">{{ record.parentName }}</span>
-        {{ record.parentId == 0 ? record.metaTitle : '└──' + record.metaTitle }}
-      </template>
       <template #metaIcon="{ record }">
         <Icon :icon="record.metaIcon" :size="30" />
       </template>

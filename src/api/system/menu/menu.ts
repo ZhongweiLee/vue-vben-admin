@@ -6,6 +6,7 @@ import {
   MenuListGetResultModel,
   MenuListItem,
   MenuListParams,
+  MenuOptionsTreeGetResultModel,
 } from './model/menuModel';
 
 enum Api {
@@ -14,6 +15,7 @@ enum Api {
   menuDirOptionUri = '/menu/getMenuDirOption',
   menuEidtUri = '/menu/editMenu',
   menuDetailUri = '/menu/getMenuById',
+  menuOptionTreeUri = '/menu/tree',
 }
 
 /**
@@ -64,6 +66,16 @@ export function menuEditApi(params: MenuEditParam) {
 export function menuGetByIdApi(id: number | string | any) {
   return defHttp.request<MenuListItem>({
     url: Api.menuDetailUri + '?id=' + id,
+    method: 'GET',
+    headers: {
+      ignoreCancelToken: true,
+    },
+  });
+}
+
+export function menuOptionTreeApi() {
+  return defHttp.request<MenuOptionsTreeGetResultModel>({
+    url: Api.menuOptionTreeUri,
     method: 'GET',
     headers: {
       ignoreCancelToken: true,

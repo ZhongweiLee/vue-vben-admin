@@ -19,3 +19,12 @@ export interface RoleListItem {
  * @description: 角色列表
  */
 export type RoleListGetResultModel = BasicFetchResult<RoleListItem>;
+
+export interface RoleAddParam {
+  roleName: string;
+  roleKey: string;
+  roleSort: string;
+  remark: string;
+  admin: string;
+  menus: string;
+}

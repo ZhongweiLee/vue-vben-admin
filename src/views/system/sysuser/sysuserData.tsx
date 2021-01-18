@@ -13,11 +13,17 @@ export function getSysUserListColumns(): BasicColumn[] {
     {
       title: '用户名',
       dataIndex: 'username',
+      width: 150,
+    },
+    {
+      title: '头像',
       width: 80,
+      dataIndex: 'avatar',
+      slots: { customRender: 'avatar' },
     },
     {
       title: '姓名',
-      width: 100,
+      width: 150,
       dataIndex: 'nickname',
     },
     {
@@ -27,21 +33,14 @@ export function getSysUserListColumns(): BasicColumn[] {
       slots: { customRender: 'status' },
     },
     {
-      title: '创建时间',
-      width: 150,
-      dataIndex: 'createdAt',
-      customRender: ({ record }) => moment(record.createdAt).format('YYYY-MM-DD HH:mm:ss'),
-    },
-    {
       title: '手机号',
-      width: 100,
+      width: 150,
       dataIndex: 'phone',
     },
     {
-      title: '头像',
-      width: 80,
-      dataIndex: 'avatar',
-      slots: { customRender: 'avatar' },
+      title: '邮箱',
+      width: 150,
+      dataIndex: 'email',
     },
     {
       title: '性别',
@@ -50,9 +49,10 @@ export function getSysUserListColumns(): BasicColumn[] {
       customRender: ({ record }) => getSexLabel(record.sex),
     },
     {
-      title: '邮箱',
+      title: '创建时间',
       width: 150,
-      dataIndex: 'email',
+      dataIndex: 'createdAt',
+      customRender: ({ record }) => moment(record.createdAt).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: '部门',

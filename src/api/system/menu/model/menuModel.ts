@@ -20,7 +20,6 @@ export interface MenuListItem {
   metaHideTab: boolean;
   MetaCurrentActiveMenu: string;
   children?: MenuListItem[];
-  parentName: string;
 }
 
 /**
@@ -59,3 +58,11 @@ export interface MenuEditParam {
   parentId: string;
   menuTye: string;
 }
+
+export interface MenuTreeOption {
+  title: string;
+  key: string;
+  children?: MenuTreeOption[];
+}
+
+export type MenuOptionsTreeGetResultModel = MenuTreeOption[];

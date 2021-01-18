@@ -8,14 +8,13 @@ export function getMenuListColumns(): BasicColumn[] {
     {
       title: 'ID',
       dataIndex: 'id',
-      fixed: 'left',
+      defaultHidden: true,
       width: 100,
     },
     {
       title: '菜单名称',
       dataIndex: 'metaTitle',
-      width: 150,
-      slots: { customRender: 'metaTitle' },
+      width: 200,
       align: 'left',
       fixed: 'left',
     },
@@ -64,6 +63,7 @@ export function getMenuListColumns(): BasicColumn[] {
       title: '父节点ID',
       width: 80,
       dataIndex: 'parentId',
+      defaultHidden: true,
     },
   ];
 }

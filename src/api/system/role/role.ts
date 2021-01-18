@@ -1,8 +1,14 @@
 import { defHttp } from '/@/utils/http/axios';
-import { RoleListGetResultModel, RoleListParams } from './model/roleModel';
+import {
+  RoleAddParam,
+  RoleListGetResultModel,
+  RoleListItem,
+  RoleListParams,
+} from './model/roleModel';
 
 enum Api {
-  roleListUri = '/role/list',
+  roleListUri = '/role/getRoleList',
+  roleAddUri = '/role/addRole',
 }
 
 /**
@@ -12,6 +18,17 @@ export function roleListApi(params: RoleListParams) {
   return defHttp.request<RoleListGetResultModel>({
     url: Api.roleListUri,
     method: 'GET',
+    params,
+    headers: {
+      ignoreCancelToken: true,
+    },
+  });
+}
+
+export function roleAddApi(params: RoleAddParam) {
+  return defHttp.request<RoleListItem>({
+    url: Api.roleAddUri,
+    method: 'POST',
     params,
     headers: {
       ignoreCancelToken: true,

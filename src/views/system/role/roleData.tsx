@@ -1,6 +1,7 @@
 import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import moment from 'moment';
+import { Tag } from 'ant-design-vue';
 
 export function getRoleListColumns(): BasicColumn[] {
   return [
@@ -12,17 +13,22 @@ export function getRoleListColumns(): BasicColumn[] {
     {
       title: '角色名称',
       dataIndex: 'roleName',
-      width: 50,
+      width: 150,
     },
     {
       title: '角色编码',
-      width: 100,
+      width: 150,
       dataIndex: 'roleKey',
     },
     {
       title: '状态',
       dataIndex: 'status',
-      width: 40,
+      width: 50,
+      customRender: ({ record }) => {
+        const color = record.status === '1' ? 'green' : 'red';
+        const text = record.status === '1' ? '正常' : '失效';
+        return <Tag color={color}>{() => text}</Tag>;
+      },
     },
     {
       title: '创建时间',
