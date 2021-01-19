@@ -1,10 +1,6 @@
 <template>
   <PageWrapper>
     <BasicTable @register="registerTable">
-      <template #status="{ record }">
-        <a-tag v-if="record.status == '1'" color="green"> 正常 </a-tag>
-        <a-tag v-if="record.status == '0'" color="red"> 停用 </a-tag>
-      </template>
       <template #avatar="{ record }">
         <img
           :src="record.avatar == '' ? '/@/assets/images/header.jpg' : record.avatar"

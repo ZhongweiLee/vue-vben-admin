@@ -1,5 +1,6 @@
 import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
+import { Tag } from 'ant-design-vue';
 import moment from 'moment';
 import { dictDataOptionsApi } from '/@/api/system/dict/dict';
 
@@ -30,7 +31,11 @@ export function getSysUserListColumns(): BasicColumn[] {
       title: '状态',
       dataIndex: 'status',
       width: 60,
-      slots: { customRender: 'status' },
+      customRender: ({ record }) => {
+        const color = record.status === '1' ? 'green' : 'red';
+        const text = record.status === '1' ? '正常' : '失效';
+        return <Tag color={color}>{() => text}</Tag>;
+      },
     },
     {
       title: '手机号',

@@ -1,6 +1,8 @@
 import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import moment from 'moment';
+import { Tag } from 'ant-design-vue';
+
 import { dictDataOptionsApi } from '/@/api/system/dict/dict';
 
 export function getPostListColumns(): BasicColumn[] {
@@ -32,7 +34,11 @@ export function getPostListColumns(): BasicColumn[] {
       dataIndex: 'status',
       width: 100,
       align: 'center',
-      customRender: ({ record }) => getStatusLabel(record.status),
+      customRender: ({ record }) => {
+        const color = record.status === '1' ? 'green' : 'red';
+        const text = record.status === '1' ? '正常' : '失效';
+        return <Tag color={color}>{() => text}</Tag>;
+      },
     },
     {
       title: '排序',
@@ -50,13 +56,6 @@ export function getPostListColumns(): BasicColumn[] {
       customRender: ({ record }) => moment(record.createdAt).format('YYYY-MM-DD HH:mm:ss'),
     },
   ];
-}
-export function getStatusLabel(status: string): string {
-  if (status == '1') {
-    return '正常';
-  } else {
-    return '失效';
-  }
 }
 
 export function getPostListFormConfig(): Partial<FormProps> {
