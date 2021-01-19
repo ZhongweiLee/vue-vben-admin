@@ -46,5 +46,12 @@ export interface RoleEditParam {
   roleSort: string;
   remark: string;
   admin: string;
-  menus: string;
+  menus: any[];
 }
+
+export interface RoleCheckBoxOption {
+  label: string;
+  value: string;
+}
+
+export type RoleCheckBoxOptionsGetResultModel = RoleCheckBoxOption[];

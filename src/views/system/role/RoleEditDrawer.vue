@@ -19,11 +19,11 @@
   import { defineComponent, ref, unref } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { CollapseContainer } from '/@/components/Container/index';
-  import { BasicTree, Keys, TreeActionType, TreeItem } from '/@/components/Tree/index';
+  import { BasicTree, TreeActionType, TreeItem } from '/@/components/Tree/index';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
   import { useMessage } from '/@/hooks/web/useMessage';
 
-  import { RoleAddParam } from '/@/api/system/role/model/roleModel';
+  import { RoleEditParam } from '/@/api/system/role/model/roleModel';
   import { menuOptionTreeApi } from '/@/api/system/menu/menu';
   import { roleEditApi, roleGetByIdApi } from '/@/api/system/role/role';
 
@@ -116,7 +116,7 @@
         //查询角色详情
         roleGetByIdApi(data.roleId).then((val) => {
           //设置勾选数据
-          var selectKeys: Keys = [];
+          var selectKeys: any[] = [];
 
           if (val.menuIds != null) {
             val.menuIds.forEach((element) => {
@@ -139,10 +139,10 @@
       });
       async function handleOk() {
         try {
-          const keys = getTree().getCheckedKeys();
+          const keys = getTree().getCheckedKeys() as any[];
           //useMessage().createMessage.success(JSON.stringify(keys));
 
-          const res = (await validateFields()) as RoleAddParam;
+          const res = (await validateFields()) as RoleEditParam;
           res.menus = keys;
           roleEditApi(res).then(() => {
             closeDrawer();

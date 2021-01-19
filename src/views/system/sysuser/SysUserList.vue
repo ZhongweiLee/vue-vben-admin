@@ -18,7 +18,7 @@
             {
               label: '权限',
               icon: 'ic:outline-security',
-              onClick: handleEdit.bind(null, record),
+              onClick: handleEditRole.bind(null, record),
             },
           ]"
           :drop-down-actions="[
@@ -41,6 +41,7 @@
     <SysUserEdit @register="registerEdit" />
     <SysUserAdd @register="registerAdd" />
     <SysUserResetPassword @register="registerResetPassword" />
+    <SysUserEditRole @register="registerEditRole" />
   </PageWrapper>
 </template>
 
@@ -55,6 +56,8 @@
   import SysUserEdit from './SysUserEdit.vue';
   import SysUserAdd from './SysUserAdd.vue';
   import SysUserResetPassword from './SysUserRestPassword.vue';
+  import SysUserEditRole from './SysUserEditRole.vue';
+  import { roleGetCheckBoxOptionsApi } from '/@/api/system/role/role';
 
   export default defineComponent({
     components: {
@@ -65,6 +68,7 @@
       SysUserEdit,
       SysUserAdd,
       SysUserResetPassword,
+      SysUserEditRole,
     },
     setup() {
       const [registerTable] = useTable({
@@ -85,6 +89,7 @@
       const [registerEdit, { openModal: openModalEdit }] = useModal();
       const [registerAdd, { openModal: openModalAdd }] = useModal();
       const [registerResetPassword, { openModal: openModalResetPassword }] = useModal();
+      const [registerEditRole, { openModal: openModalEditRole }] = useModal();
 
       function handleEdit(record: Recordable) {
         openModalEdit(
@@ -123,15 +128,32 @@
         );
       }
 
+      function handleEditRole(record: Recordable) {
+        roleGetCheckBoxOptionsApi().then((val) => {
+          openModalEditRole(
+            true,
+            {
+              options: val,
+              userId: record.userId,
+              username: record.username,
+              nickname: record.nickname,
+            },
+            true
+          );
+        });
+      }
+
       return {
         registerTable,
         handleEdit,
         handleAdd,
         handleOpen,
         handleResetPassword,
+        handleEditRole,
         registerEdit,
         registerAdd,
         registerResetPassword,
+        registerEditRole,
       };
     },
   });

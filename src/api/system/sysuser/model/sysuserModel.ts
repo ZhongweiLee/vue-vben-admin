@@ -53,3 +53,25 @@ export interface SysUserResetPasswordParams {
  * @description: 系统用户列表
  */
 export type SysUserListGetResultModel = BasicFetchResult<SysUserListItem>;
+
+export interface SysUserDetail {
+  userId: number;
+  nickname: string;
+  phone: string;
+  roleId: number;
+  avatar: string;
+  sex: string;
+  email: string;
+  username: string;
+  status: string;
+  createdAt: string;
+  remark: string;
+  deptName: string;
+  postId: number;
+  roleIds: number[];
+}
+
+export interface SysUserModifyRoleParam {
+  userId: string;
+  roleIds: string[];
+}

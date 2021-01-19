@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="register" title="系统用户修改" @ok="handleSubmit">
+  <BasicModal v-bind="$attrs" @register="register" title="修改用户角色" @ok="handleSubmit">
     <BasicForm :model="model" @register="registerForm" @submit="handleSubmit" />
   </BasicModal>
 </template>
@@ -141,11 +141,11 @@
         try {
           const res = (await validateFields()) as SysUserUpdateParams;
           //const v = getFieldsValue();
-          sysUserUpdateApi(res).then((val) => {
+          sysUserUpdateApi(res).then(() => {
             //console.log(val);
+            closeModal();
           });
           //createMessage.success('click search,values:' + JSON.stringify(v));
-          closeModal();
         } catch (error) {
           console.warn('not passing', error);
         }

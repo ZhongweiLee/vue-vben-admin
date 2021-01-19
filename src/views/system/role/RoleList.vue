@@ -8,6 +8,7 @@
               label: '编辑',
               icon: 'ic:outline-edit',
               onClick: handleEdit.bind(null, record),
+              disabled: record.status != '1',
             },
             {
               label: '删除',

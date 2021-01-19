@@ -6,6 +6,8 @@ import {
   SysUserUpdateParams,
   SysUserAddParams,
   SysUserResetPasswordParams,
+  SysUserDetail,
+  SysUserModifyRoleParam,
 } from './model/sysuserModel';
 
 enum Api {
@@ -13,6 +15,8 @@ enum Api {
   sysUserUpdateUri = '/sysuser',
   sysUserChangeStatus = '/sysuser/changeStatus',
   sysUserRestPasswordUri = '/sysuser/resetPassword',
+  sysUserDetailUri = '/sysuser/getSysUserById',
+  sysUserModifyRole = '/sysuser/modifySysUserRole',
 }
 
 /**
@@ -81,6 +85,31 @@ export function changeSysUserStatuApi(params: any) {
   return defHttp.request<SysUserListItem>({
     url: Api.sysUserChangeStatus,
     method: 'DELETE',
+    params: params,
+    headers: {
+      ignoreCancelToken: true,
+    },
+  });
+}
+/**
+ *
+ * @param userId 用户详情包含角色IDs
+ * @returns
+ */
+export function sysUserGetDetailApi(userId: string | number) {
+  return defHttp.request<SysUserDetail>({
+    url: Api.sysUserDetailUri + '?userId=' + userId,
+    method: 'GET',
+    headers: {
+      ignoreCancelToken: true,
+    },
+  });
+}
+
+export function sysUserModifyRoleApi(params: SysUserModifyRoleParam) {
+  return defHttp.request<SysUserDetail>({
+    url: Api.sysUserModifyRole,
+    method: 'PUT',
     params: params,
     headers: {
       ignoreCancelToken: true,
