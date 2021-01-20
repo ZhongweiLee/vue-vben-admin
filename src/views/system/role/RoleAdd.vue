@@ -10,7 +10,7 @@
     <div>
       <BasicForm @register="registerForm" />
       <CollapseContainer title="选择菜单" class="mr-4" :style="{ width: '50%' }">
-        <BasicTree ref="treeRef" :tree-data="treeData" :checkable="true" />
+        <BasicTree ref="roleAddTreeRef" :tree-data="roleAddTreeData" :checkable="true" />
       </CollapseContainer>
     </div>
   </BasicDrawer>
@@ -24,7 +24,6 @@
   import { useMessage } from '/@/hooks/web/useMessage';
 
   import { RoleAddParam } from '/@/api/system/role/model/roleModel';
-  import { menuOptionTreeApi } from '/@/api/system/menu/menu';
   import { roleAddApi } from '/@/api/system/role/role';
 
   const schemas: FormSchema[] = [
@@ -78,6 +77,7 @@
   export default defineComponent({
     components: { BasicDrawer, BasicForm, BasicTree, CollapseContainer },
     setup() {
+      const roleAddTreeRef = ref<Nullable<TreeActionType>>(null);
       const [registerForm, { validateFields, setFieldsValue }] = useForm({
         labelWidth: 120,
         schemas,
@@ -87,17 +87,10 @@
         },
       });
 
-      var treeData: TreeItem[] = [];
-      menuOptionTreeApi().then((res) => {
-        res.forEach((val) => {
-          treeData.push(val);
-        });
-      });
+      const roleAddTreeData: TreeItem[] = [];
 
-      const treeRef = ref<Nullable<TreeActionType>>(null);
-
-      function getTree() {
-        const tree = unref(treeRef);
+      function getRoleAddTree() {
+        const tree = unref(roleAddTreeRef);
         if (!tree) {
           throw new Error('tree is null!');
         }
@@ -105,16 +98,25 @@
       }
 
       const [register, { closeDrawer }] = useDrawerInner((data) => {
-        // 清空表单
-        setFieldsValue({});
+        var opt = data.options as TreeItem[];
+
+        if (roleAddTreeData.length > 0) {
+          roleAddTreeData.splice(0, roleAddTreeData.length);
+        }
+
+        opt.forEach((element) => {
+          roleAddTreeData.push(element);
+        });
+        getRoleAddTree().setCheckedKeys([]);
+
+        setFieldsValue({ options: data.options });
       });
       async function handleOk() {
         try {
-          const keys = getTree().getCheckedKeys();
-          //useMessage().createMessage.success(JSON.stringify(keys));
+          const keys = getRoleAddTree().getCheckedKeys();
 
           const res = (await validateFields()) as RoleAddParam;
-          res.menus = keys;
+          res.menus = keys as any[];
           roleAddApi(res).then(() => {
             closeDrawer();
             useMessage().createMessage.info('角色添加成功');
@@ -129,8 +131,8 @@
         registerForm,
         handleOk,
         closeDrawer,
-        treeData,
-        treeRef,
+        roleAddTreeData,
+        roleAddTreeRef,
       };
     },
   });

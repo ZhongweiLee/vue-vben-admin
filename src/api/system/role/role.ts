@@ -10,11 +10,11 @@ import {
 } from './model/roleModel';
 
 enum Api {
-  roleListUri = '/role/getRoleList',
   roleAddUri = '/role/addRole',
   roleGetUri = '/role/getRoleById',
-  roleEditUri = '/role',
   roleCheckBoxOptionsUri = '/role/getRoleCheckBoxOptions',
+  roleListUri = '/role/getRoleList',
+  roleEditUri = '/role',
 }
 
 /**

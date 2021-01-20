@@ -11,12 +11,12 @@ import {
 } from './model/sysuserModel';
 
 enum Api {
-  sysUserListUri = '/sysuser/sysUserlist',
+  sysUserDetailUri = '/sysuser/getSysUserById',
   sysUserUpdateUri = '/sysuser',
   sysUserChangeStatus = '/sysuser/changeStatus',
-  sysUserRestPasswordUri = '/sysuser/resetPassword',
-  sysUserDetailUri = '/sysuser/getSysUserById',
   sysUserModifyRole = '/sysuser/modifySysUserRole',
+  sysUserRestPasswordUri = '/sysuser/resetPassword',
+  sysUserListUri = '/sysuser/sysUserList',
 }
 
 /**

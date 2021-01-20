@@ -26,7 +26,7 @@ export interface RoleAddParam {
   roleSort: string;
   remark: string;
   admin: string;
-  menus: string;
+  menus: any[];
 }
 
 export interface RoleDetail {

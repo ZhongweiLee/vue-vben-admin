@@ -10,11 +10,11 @@ import {
 } from './model/menuModel';
 
 enum Api {
-  menuListUri = '/menu/getMenuList',
   menuAddUri = '/menu/addMenu',
-  menuDirOptionUri = '/menu/getMenuDirOption',
   menuEidtUri = '/menu/editMenu',
   menuDetailUri = '/menu/getMenuById',
+  menuDirOptionUri = '/menu/getMenuDirOption',
+  menuListUri = '/menu/getMenuList',
   menuOptionTreeUri = '/menu/tree',
 }
 

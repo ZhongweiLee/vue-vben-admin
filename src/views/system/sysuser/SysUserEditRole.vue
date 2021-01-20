@@ -12,7 +12,7 @@
   import { SysUserModifyRoleParam } from '/@/api/system/sysuser/model/sysuserModel';
   import { useMessage } from '/@/hooks/web/useMessage';
 
-  const abc: any = [];
+  const roleCheckBoxData: any = [];
 
   const schemas: FormSchema[] = [
     {
@@ -51,10 +51,10 @@
       component: 'CheckboxGroup',
       label: '角色',
       componentProps: {
-        options: abc,
+        options: roleCheckBoxData,
       },
       colProps: {
-        span: 12,
+        span: 24,
       },
     },
   ];
@@ -72,12 +72,12 @@
       });
 
       const [register, { closeModal }] = useModalInner((data) => {
-        if (abc.length > 0) {
-          abc.splice(0, abc.length);
+        if (roleCheckBoxData.length > 0) {
+          roleCheckBoxData.splice(0, roleCheckBoxData.length);
         }
         var checkboxoptions = data.options as any[];
         checkboxoptions.forEach((v) => {
-          abc.push(v);
+          roleCheckBoxData.push(v);
         });
 
         sysUserGetDetailApi(data.userId).then((val) => {

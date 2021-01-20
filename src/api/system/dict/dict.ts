@@ -8,10 +8,10 @@ import {
 import { BasicPageParams } from '../../model/baseModel';
 
 enum Api {
-  dictDataOptionsUri = '/dict/options/',
-  dictDataListUri = '/dict/data/getDictDataList',
   dictDataUri = '/dict',
+  dictDataListUri = '/dict/getDictDataList',
   dictDataDeleteUril = '/dict/deleteDictData/',
+  dictDataOptionsUri = '/dict/options/',
 }
 
 export function dictDataOptionsApi(dictType: string) {

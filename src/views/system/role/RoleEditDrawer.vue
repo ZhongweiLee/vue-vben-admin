@@ -24,7 +24,7 @@
   import { useMessage } from '/@/hooks/web/useMessage';
 
   import { RoleEditParam } from '/@/api/system/role/model/roleModel';
-  import { menuOptionTreeApi } from '/@/api/system/menu/menu';
+
   import { roleEditApi, roleGetByIdApi } from '/@/api/system/role/role';
 
   const schemas: FormSchema[] = [
@@ -83,9 +83,12 @@
       required: true,
     },
   ];
+
   export default defineComponent({
     components: { BasicDrawer, BasicForm, BasicTree, CollapseContainer },
     setup() {
+      const treeRef = ref<Nullable<TreeActionType>>(null);
+
       const [registerForm, { validateFields, setFieldsValue }] = useForm({
         labelWidth: 120,
         schemas,
@@ -95,14 +98,7 @@
         },
       });
 
-      var treeData: TreeItem[] = [];
-      menuOptionTreeApi().then((res) => {
-        res.forEach((val) => {
-          treeData.push(val);
-        });
-      });
-
-      const treeRef = ref<Nullable<TreeActionType>>(null);
+      const treeData: TreeItem[] = [];
 
       function getTree() {
         const tree = unref(treeRef);
@@ -113,18 +109,18 @@
       }
 
       const [register, { closeDrawer }] = useDrawerInner((data) => {
+        var opt = data.options as TreeItem[];
+
+        if (treeData.length > 0) {
+          treeData.splice(0, treeData.length);
+        }
+
+        opt.forEach((element) => {
+          treeData.push(element);
+        });
+
         //查询角色详情
         roleGetByIdApi(data.roleId).then((val) => {
-          //设置勾选数据
-          var selectKeys: any[] = [];
-
-          if (val.menuIds != null) {
-            val.menuIds.forEach((element) => {
-              selectKeys.push(element.toString());
-            });
-            getTree().setCheckedKeys(selectKeys);
-          }
-
           //设置表单
           setFieldsValue({
             roleId: val.roleId,
@@ -134,7 +130,16 @@
             roleSort: val.roleSort,
             remark: val.remark,
             admin: val.admin ? '1' : '0',
+            options: data.options,
           });
+
+          var selectKeys: any[] = [];
+          if (val.menuIds != null) {
+            val.menuIds.forEach((element) => {
+              selectKeys.push(element.toString());
+            });
+          }
+          getTree().setCheckedKeys(selectKeys);
         });
       });
       async function handleOk() {

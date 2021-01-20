@@ -44,6 +44,7 @@
   import RoleAdd from './RoleAdd.vue';
   import RoleEditDrawer from './RoleEditDrawer.vue';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { menuOptionTreeApi } from '/@/api/system/menu/menu';
 
   export default defineComponent({
     components: { BasicTable, TableAction, RoleAdd, RoleEditDrawer, PageWrapper },
@@ -64,16 +65,23 @@
         },
       });
 
-      const [registerAdd, { openDrawer: openAddDrawer }] = useDrawer();
+      const [registerAdd, { openDrawer: openAddDrawer, setDrawerProps }] = useDrawer();
 
       function handleAdd() {
-        console.log('click add');
-        openAddDrawer(true, {});
+        menuOptionTreeApi().then((res) => {
+          openAddDrawer(true, { options: res });
+          setDrawerProps({ loading: true });
+          setTimeout(() => {
+            setDrawerProps({ loading: false });
+          }, 200);
+        });
       }
 
       const [registerEditDrawer, { openDrawer: openEditDrawer }] = useDrawer();
       function handleEdit(record: Recordable) {
-        openEditDrawer(true, { roleId: record.roleId }, true);
+        menuOptionTreeApi().then((res) => {
+          openEditDrawer(true, { roleId: record.roleId, options: res });
+        });
       }
 
       function handleDelete(record: Recordable) {
