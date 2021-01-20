@@ -19,7 +19,7 @@
   import { defineComponent, ref, unref } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { CollapseContainer } from '/@/components/Container/index';
-  import { BasicTree, TreeActionType, TreeItem } from '/@/components/Tree/index';
+  import { BasicTree, TreeActionType } from '/@/components/Tree/index';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
   import { useMessage } from '/@/hooks/web/useMessage';
 
@@ -78,6 +78,8 @@
     components: { BasicDrawer, BasicForm, BasicTree, CollapseContainer },
     setup() {
       const roleAddTreeRef = ref<Nullable<TreeActionType>>(null);
+      const roleAddTreeData = ref([]);
+
       const [registerForm, { validateFields, setFieldsValue }] = useForm({
         labelWidth: 120,
         schemas,
@@ -86,8 +88,6 @@
           span: 24,
         },
       });
-
-      const roleAddTreeData: TreeItem[] = [];
 
       function getRoleAddTree() {
         const tree = unref(roleAddTreeRef);
@@ -98,18 +98,10 @@
       }
 
       const [register, { closeDrawer }] = useDrawerInner((data) => {
-        var opt = data.options as TreeItem[];
-
-        if (roleAddTreeData.length > 0) {
-          roleAddTreeData.splice(0, roleAddTreeData.length);
-        }
-
-        opt.forEach((element) => {
-          roleAddTreeData.push(element);
-        });
-        getRoleAddTree().setCheckedKeys([]);
+        roleAddTreeData.value = data.options;
 
         setFieldsValue({ options: data.options });
+        getRoleAddTree().setCheckedKeys([]);
       });
       async function handleOk() {
         try {
@@ -131,8 +123,8 @@
         registerForm,
         handleOk,
         closeDrawer,
-        roleAddTreeData,
         roleAddTreeRef,
+        roleAddTreeData,
       };
     },
   });

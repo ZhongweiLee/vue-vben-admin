@@ -13,8 +13,6 @@ export function operaLogListApi(params: OperaLogParams) {
     url: Api.operaLogListUri,
     method: 'GET',
     params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }

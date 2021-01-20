@@ -134,7 +134,7 @@
         try {
           const res = (await validateFields()) as SysUserAddParams;
           //const v = getFieldsValue();
-          sysUserAddApi(res).then((val) => {
+          sysUserAddApi(res).then(() => {
             //console.log(val);
           });
           //createMessage.success('click search,values:' + JSON.stringify(v));

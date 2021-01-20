@@ -19,7 +19,7 @@
   import { defineComponent, ref, unref } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { CollapseContainer } from '/@/components/Container/index';
-  import { BasicTree, TreeActionType, TreeItem } from '/@/components/Tree/index';
+  import { BasicTree, TreeActionType } from '/@/components/Tree/index';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
   import { useMessage } from '/@/hooks/web/useMessage';
 
@@ -88,6 +88,7 @@
     components: { BasicDrawer, BasicForm, BasicTree, CollapseContainer },
     setup() {
       const treeRef = ref<Nullable<TreeActionType>>(null);
+      const treeData = ref([]);
 
       const [registerForm, { validateFields, setFieldsValue }] = useForm({
         labelWidth: 120,
@@ -98,8 +99,6 @@
         },
       });
 
-      const treeData: TreeItem[] = [];
-
       function getTree() {
         const tree = unref(treeRef);
         if (!tree) {
@@ -109,15 +108,7 @@
       }
 
       const [register, { closeDrawer }] = useDrawerInner((data) => {
-        var opt = data.options as TreeItem[];
-
-        if (treeData.length > 0) {
-          treeData.splice(0, treeData.length);
-        }
-
-        opt.forEach((element) => {
-          treeData.push(element);
-        });
+        treeData.value = data.options;
 
         //查询角色详情
         roleGetByIdApi(data.roleId).then((val) => {
@@ -145,7 +136,6 @@
       async function handleOk() {
         try {
           const keys = getTree().getCheckedKeys() as any[];
-          //useMessage().createMessage.success(JSON.stringify(keys));
 
           const res = (await validateFields()) as RoleEditParam;
           res.menus = keys;

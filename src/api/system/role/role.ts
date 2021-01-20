@@ -25,9 +25,7 @@ export function roleListApi(params: RoleListParams) {
     url: Api.roleListUri,
     method: 'GET',
     params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -36,9 +34,7 @@ export function roleAddApi(params: RoleAddParam) {
     url: Api.roleAddUri,
     method: 'POST',
     params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -46,9 +42,7 @@ export function roleGetByIdApi(roleId: number | string) {
   return defHttp.request<RoleDetail>({
     url: Api.roleGetUri + '?roleId=' + roleId,
     method: 'GET',
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -57,9 +51,7 @@ export function roleEditApi(params: RoleEditParam) {
     url: Api.roleEditUri,
     method: 'PUT',
     params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -67,9 +59,7 @@ export function roleDeleteApi(roleId: number | string) {
   return defHttp.request<RoleListItem>({
     url: Api.roleEditUri + '/' + roleId,
     method: 'DELETE',
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -77,8 +67,6 @@ export function roleGetCheckBoxOptionsApi() {
   return defHttp.request<RoleCheckBoxOptionsGetResultModel>({
     url: Api.roleCheckBoxOptionsUri,
     method: 'GET',
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }

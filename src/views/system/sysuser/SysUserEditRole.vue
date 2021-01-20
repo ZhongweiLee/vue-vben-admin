@@ -12,7 +12,7 @@
   import { SysUserModifyRoleParam } from '/@/api/system/sysuser/model/sysuserModel';
   import { useMessage } from '/@/hooks/web/useMessage';
 
-  const roleCheckBoxData: any = [];
+  const roleCheckBoxData: any = ref([]);
 
   const schemas: FormSchema[] = [
     {
@@ -72,13 +72,7 @@
       });
 
       const [register, { closeModal }] = useModalInner((data) => {
-        if (roleCheckBoxData.length > 0) {
-          roleCheckBoxData.splice(0, roleCheckBoxData.length);
-        }
-        var checkboxoptions = data.options as any[];
-        checkboxoptions.forEach((v) => {
-          roleCheckBoxData.push(v);
-        });
+        roleCheckBoxData.value = data.options;
 
         sysUserGetDetailApi(data.userId).then((val) => {
           setFieldsValue({
@@ -95,7 +89,6 @@
           const res = (await validateFields()) as SysUserModifyRoleParam;
           //const v = getFieldsValue();
           sysUserModifyRoleApi(res).then(() => {
-            //console.log(val);
             closeModal();
             useMessage().createMessage.success('角色修改成功');
           });

@@ -19,9 +19,7 @@ export function dictDataOptionsApi(dictType: string) {
     url: Api.dictDataOptionsUri,
     method: 'GET',
     params: dictType,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -30,9 +28,7 @@ export function dictDataListApi(params: BasicPageParams) {
     url: Api.dictDataListUri,
     method: 'GET',
     params: params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -41,9 +37,7 @@ export function dictDataAddApi(params: DictDataAddParam) {
     url: Api.dictDataUri,
     method: 'POST',
     params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -51,8 +45,6 @@ export function dictDataDeleteApi(id: number) {
   return defHttp.request<DictDataItem>({
     url: Api.dictDataDeleteUril + id,
     method: 'DELETE',
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }

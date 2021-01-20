@@ -13,8 +13,6 @@ export function loginLogListApi(params: LoginLogParams) {
     url: Api.loginLogListUri,
     method: 'GET',
     params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }

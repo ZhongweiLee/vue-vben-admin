@@ -21,9 +21,7 @@ export function postListApi(params: PostListParams) {
     url: Api.postListUri,
     method: 'GET',
     params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 /**
@@ -33,9 +31,7 @@ export function postOptionsApi() {
   return defHttp.request<PostOptionsGetResultModel>({
     url: Api.postOptionUri,
     method: 'GET',
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -44,9 +40,7 @@ export function updatePost(params: any) {
     url: Api.postUri,
     method: 'PUT',
     params: params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -54,9 +48,7 @@ export function deletePost(postId: number) {
   return defHttp.request<PostListItem>({
     url: Api.postUri + '/' + postId,
     method: 'DELETE',
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 export function postAddApi(params: PostAddParam) {
@@ -64,8 +56,6 @@ export function postAddApi(params: PostAddParam) {
     url: Api.postUri,
     method: 'POST',
     params: params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }

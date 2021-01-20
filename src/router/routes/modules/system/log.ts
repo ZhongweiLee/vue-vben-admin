@@ -17,7 +17,7 @@ const systemLog: AppRouteModule = {
     {
       path: 'dict',
       name: 'Dict',
-      component: () => import('/@/views/system/dictdata/DictDataList.vue'),
+      component: () => import('/@/views/system/dict/DictDataList.vue'),
       meta: {
         title: t('routes.system.dictDataList'),
       },

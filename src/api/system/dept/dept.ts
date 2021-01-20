@@ -18,9 +18,7 @@ export function deptListApi(params: DeptListParams) {
     url: Api.deptListUri,
     method: 'GET',
     params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -31,8 +29,6 @@ export function deptOptionsApi() {
   return defHttp.request<DeptOptionsGetResultModel>({
     url: Api.deptOptionUri,
     method: 'GET',
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }

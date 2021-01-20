@@ -3,7 +3,7 @@
     <BasicTable @register="registerTable">
       <template #avatar="{ record }">
         <img
-          :src="record.avatar == '' ? '/@/assets/images/header.jpg' : record.avatar"
+          :src="record.avatar == '' ? headerImg : record.avatar"
           style="width: 40px; height: 40px; border-radius: 50%;"
         />
       </template>
@@ -58,6 +58,7 @@
   import SysUserResetPassword from './SysUserRestPassword.vue';
   import SysUserEditRole from './SysUserEditRole.vue';
   import { roleGetCheckBoxOptionsApi } from '/@/api/system/role/role';
+  import headerImg from '/@/assets/images/header.jpg';
 
   export default defineComponent({
     components: {
@@ -154,6 +155,7 @@
         registerAdd,
         registerResetPassword,
         registerEditRole,
+        headerImg,
       };
     },
   });

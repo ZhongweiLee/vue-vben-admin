@@ -27,9 +27,7 @@ export function sysUserListApi(params: SysUserListParams) {
     url: Api.sysUserListUri,
     method: 'GET',
     params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 /**
@@ -41,9 +39,7 @@ export function sysUserUpdateApi(params: SysUserUpdateParams) {
     url: Api.sysUserUpdateUri,
     method: 'PUT',
     params: params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -56,9 +52,7 @@ export function sysUserAddApi(params: SysUserAddParams) {
     url: Api.sysUserUpdateUri,
     method: 'POST',
     params: params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -71,9 +65,7 @@ export function sysUserResetPasswordApi(params: SysUserResetPasswordParams) {
     url: Api.sysUserRestPasswordUri,
     method: 'PUT',
     params: params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -86,9 +78,7 @@ export function changeSysUserStatuApi(params: any) {
     url: Api.sysUserChangeStatus,
     method: 'DELETE',
     params: params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 /**
@@ -100,9 +90,7 @@ export function sysUserGetDetailApi(userId: string | number) {
   return defHttp.request<SysUserDetail>({
     url: Api.sysUserDetailUri + '?userId=' + userId,
     method: 'GET',
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
 
@@ -111,8 +99,6 @@ export function sysUserModifyRoleApi(params: SysUserModifyRoleParam) {
     url: Api.sysUserModifyRole,
     method: 'PUT',
     params: params,
-    headers: {
-      ignoreCancelToken: true,
-    },
+    headers: {},
   });
 }
