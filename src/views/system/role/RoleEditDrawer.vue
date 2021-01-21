@@ -120,7 +120,7 @@
             roleKey: val.roleKey,
             roleSort: val.roleSort,
             remark: val.remark,
-            admin: val.admin ? '1' : '0',
+            admin: val.admin,
             options: data.options,
           });
 

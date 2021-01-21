@@ -22,7 +22,7 @@
       </template>
 
       <template #admin="{ record }">
-        {{ record.admin ? '是' : '否' }}
+        {{ record.admin == '1' ? '是' : '否' }}
       </template>
       <template #toolbar>
         <a-button type="primary" @click="handleAdd"> 添加角色 </a-button>
