@@ -10,7 +10,12 @@
     <div>
       <BasicForm @register="registerForm" />
       <CollapseContainer title="选择菜单" class="mr-4" :style="{ width: '50%' }">
-        <BasicTree ref="treeRef" :tree-data="treeData" :checkable="true" />
+        <BasicTree
+          ref="treeRef"
+          :tree-data="treeData"
+          :checked-keys="checkedKeys"
+          :checkable="true"
+        />
       </CollapseContainer>
     </div>
   </BasicDrawer>
@@ -19,7 +24,7 @@
   import { defineComponent, ref, unref } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { CollapseContainer } from '/@/components/Container/index';
-  import { BasicTree, TreeActionType } from '/@/components/Tree/index';
+  import { BasicTree, TreeActionType, TreeItem } from '/@/components/Tree/index';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
   import { useMessage } from '/@/hooks/web/useMessage';
 
@@ -88,7 +93,8 @@
     components: { BasicDrawer, BasicForm, BasicTree, CollapseContainer },
     setup() {
       const treeRef = ref<Nullable<TreeActionType>>(null);
-      const treeData = ref([]);
+      const treeData = ref<TreeItem[]>([]);
+      const checkedKeys = ref<string[]>();
 
       const [registerForm, { validateFields, setFieldsValue }] = useForm({
         labelWidth: 120,
@@ -130,7 +136,7 @@
               selectKeys.push(element.toString());
             });
           }
-          getTree().setCheckedKeys(selectKeys);
+          checkedKeys.value = selectKeys;
         });
       });
       async function handleOk() {
@@ -155,6 +161,7 @@
         closeDrawer,
         treeData,
         treeRef,
+        checkedKeys,
       };
     },
   });

@@ -39,6 +39,14 @@ const systemLog: AppRouteModule = {
       },
     },
     {
+      path: 'perm',
+      name: 'Perm',
+      component: () => import('/@/views/system/perm/PermList.vue'),
+      meta: {
+        title: t('routes.system.perm'),
+      },
+    },
+    {
       path: 'post',
       name: 'Post',
       component: () => import('/@/views/system/post/PostList.vue'),

@@ -13,10 +13,7 @@ export interface GetUserInfoByUserIdParams {
   userId: string | number;
 }
 
-export interface RoleInfo {
-  //roleName: string;
-  value: string;
-}
+export type RoleInfo = string[];
 
 /**
  * @description: Login interface return value
@@ -24,7 +21,8 @@ export interface RoleInfo {
 export interface LoginResultModel {
   //userId: string | number;
   token: string;
-  role: RoleInfo;
+  expire: string;
+  //role: RoleInfo;
 }
 
 /**
