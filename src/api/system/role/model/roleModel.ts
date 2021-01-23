@@ -26,7 +26,8 @@ export interface RoleAddParam {
   roleSort: string;
   remark: string;
   admin: string;
-  menus: any[];
+  menus: string[];
+  permissions: string[];
 }
 
 export interface RoleDetail {
@@ -37,7 +38,8 @@ export interface RoleDetail {
   roleSort: number;
   remark: string;
   admin: boolean;
-  menuIds: number[];
+  menuIds?: number[];
+  permissionIds?: number[];
 }
 
 export interface RoleEditParam {
@@ -46,7 +48,8 @@ export interface RoleEditParam {
   roleSort: string;
   remark: string;
   admin: string;
-  menus: any[];
+  menus: string[];
+  permissions: string[];
 }
 
 export interface RoleCheckBoxOption {

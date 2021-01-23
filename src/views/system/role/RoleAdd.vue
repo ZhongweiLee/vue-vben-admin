@@ -9,9 +9,24 @@
   >
     <div>
       <BasicForm @register="registerForm" />
-      <CollapseContainer title="选择菜单" class="mr-4" :style="{ width: '50%' }">
-        <BasicTree ref="roleAddTreeRef" :tree-data="roleAddTreeData" :checkable="true" />
-      </CollapseContainer>
+      <div class="flex">
+        <CollapseContainer title="选择菜单" class="mr-4" :style="{ width: '50%' }">
+          <BasicTree
+            ref="roleAddTreeRef"
+            :checked-keys="roleAddTreeCheckedKeys"
+            :tree-data="roleAddTreeData"
+            :checkable="true"
+          />
+        </CollapseContainer>
+        <CollapseContainer title="选择操作权限" class="mr-4" :style="{ width: '50%' }">
+          <BasicTree
+            ref="roleAddPermTreeRef"
+            :checked-keys="roleAddPermTreeCheckedKeys"
+            :tree-data="roleAddPermTreeData"
+            :checkable="true"
+          />
+        </CollapseContainer>
+      </div>
     </div>
   </BasicDrawer>
 </template>
@@ -19,12 +34,13 @@
   import { defineComponent, ref, unref } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { CollapseContainer } from '/@/components/Container/index';
-  import { BasicTree, TreeActionType } from '/@/components/Tree/index';
+  import { BasicTree, TreeActionType, TreeItem } from '/@/components/Tree/index';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
   import { useMessage } from '/@/hooks/web/useMessage';
 
   import { RoleAddParam } from '/@/api/system/role/model/roleModel';
   import { roleAddApi } from '/@/api/system/role/role';
+  import { permissionOptionTreeApi } from '/@/api/system/perm/permission';
 
   const schemas: FormSchema[] = [
     {
@@ -78,7 +94,12 @@
     components: { BasicDrawer, BasicForm, BasicTree, CollapseContainer },
     setup() {
       const roleAddTreeRef = ref<Nullable<TreeActionType>>(null);
-      const roleAddTreeData = ref([]);
+      const roleAddTreeData = ref<TreeItem[]>([]);
+      const roleAddTreeCheckedKeys = ref<string[]>([]);
+
+      const roleAddPermTreeRef = ref<Nullable<TreeActionType>>(null);
+      const roleAddPermTreeData = ref<TreeItem[]>([]);
+      const roleAddPermTreeCheckedKeys = ref<string[]>([]);
 
       const [registerForm, { validateFields, setFieldsValue }] = useForm({
         labelWidth: 120,
@@ -96,19 +117,34 @@
         }
         return tree;
       }
+      function getRolePermAddTree() {
+        const tree = unref(roleAddPermTreeRef);
+        if (!tree) {
+          throw new Error('tree is null!');
+        }
+        return tree;
+      }
 
       const [register, { closeDrawer }] = useDrawerInner((data) => {
         roleAddTreeData.value = data.options;
 
         setFieldsValue({ options: data.options });
-        getRoleAddTree().setCheckedKeys([]);
+        roleAddTreeCheckedKeys.value = [];
+        //getRoleAddTree().setCheckedKeys([]);
+
+        permissionOptionTreeApi().then((val) => {
+          roleAddPermTreeData.value = val;
+          roleAddPermTreeCheckedKeys.value = [];
+        });
       });
       async function handleOk() {
         try {
           const keys = getRoleAddTree().getCheckedKeys();
+          const permissionKeys = getRolePermAddTree().getCheckedKeys();
 
           const res = (await validateFields()) as RoleAddParam;
-          res.menus = keys as any[];
+          res.menus = keys as string[];
+          res.permissions = permissionKeys as string[];
           roleAddApi(res).then(() => {
             closeDrawer();
             useMessage().createMessage.info('角色添加成功');
@@ -125,6 +161,10 @@
         closeDrawer,
         roleAddTreeRef,
         roleAddTreeData,
+        roleAddPermTreeRef,
+        roleAddPermTreeData,
+        roleAddTreeCheckedKeys,
+        roleAddPermTreeCheckedKeys,
       };
     },
   });

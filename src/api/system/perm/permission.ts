@@ -54,7 +54,7 @@ export function permissionGetByIdApi(id: number | string | any) {
   });
 }
 
-export function menuOptionTreeApi() {
+export function permissionOptionTreeApi() {
   return defHttp.request<PermissionOptionsTreeGetResultModel>({
     url: Api.permissionOptionTreeUri,
     method: 'GET',

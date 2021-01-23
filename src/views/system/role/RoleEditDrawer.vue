@@ -9,14 +9,24 @@
   >
     <div>
       <BasicForm @register="registerForm" />
-      <CollapseContainer title="选择菜单" class="mr-4" :style="{ width: '50%' }">
-        <BasicTree
-          ref="treeRef"
-          :tree-data="treeData"
-          :checked-keys="checkedKeys"
-          :checkable="true"
-        />
-      </CollapseContainer>
+      <div class="flex">
+        <CollapseContainer title="选择菜单" class="mr-4" :style="{ width: '50%' }">
+          <BasicTree
+            ref="treeRef"
+            :tree-data="treeData"
+            :checked-keys="checkedKeys"
+            :checkable="true"
+          />
+        </CollapseContainer>
+        <CollapseContainer title="选择操作权限" class="mr-4" :style="{ width: '50%' }">
+          <BasicTree
+            ref="treePermRef"
+            :tree-data="treePermData"
+            :checked-keys="permCheckedKeys"
+            :checkable="true"
+          />
+        </CollapseContainer>
+      </div>
     </div>
   </BasicDrawer>
 </template>
@@ -29,8 +39,8 @@
   import { useMessage } from '/@/hooks/web/useMessage';
 
   import { RoleEditParam } from '/@/api/system/role/model/roleModel';
-
   import { roleEditApi, roleGetByIdApi } from '/@/api/system/role/role';
+  import { permissionOptionTreeApi } from '/@/api/system/perm/permission';
 
   const schemas: FormSchema[] = [
     {
@@ -96,6 +106,10 @@
       const treeData = ref<TreeItem[]>([]);
       const checkedKeys = ref<string[]>();
 
+      const treePermRef = ref<Nullable<TreeActionType>>(null);
+      const treePermData = ref<TreeItem[]>([]);
+      const permCheckedKeys = ref<string[]>();
+
       const [registerForm, { validateFields, setFieldsValue }] = useForm({
         labelWidth: 120,
         schemas,
@@ -112,39 +126,58 @@
         }
         return tree;
       }
+      function getPermTree() {
+        const tree = unref(treePermRef);
+        if (!tree) {
+          throw new Error('tree is null!');
+        }
+        return tree;
+      }
 
       const [register, { closeDrawer }] = useDrawerInner((data) => {
         treeData.value = data.options;
 
-        //查询角色详情
-        roleGetByIdApi(data.roleId).then((val) => {
-          //设置表单
-          setFieldsValue({
-            roleId: val.roleId,
-            roleName: val.roleName,
-            status: val.status,
-            roleKey: val.roleKey,
-            roleSort: val.roleSort,
-            remark: val.remark,
-            admin: val.admin,
-            options: data.options,
-          });
+        permissionOptionTreeApi().then((val) => {
+          treePermData.value = val;
 
-          var selectKeys: any[] = [];
-          if (val.menuIds != null) {
-            val.menuIds.forEach((element) => {
-              selectKeys.push(element.toString());
+          //查询角色详情
+          roleGetByIdApi(data.roleId).then((val) => {
+            //设置表单
+            setFieldsValue({
+              roleId: val.roleId,
+              roleName: val.roleName,
+              status: val.status,
+              roleKey: val.roleKey,
+              roleSort: val.roleSort,
+              remark: val.remark,
+              admin: val.admin,
+              options: data.options,
             });
-          }
-          checkedKeys.value = selectKeys;
+            var selectKeys: string[] = [];
+            if (val.menuIds != null) {
+              val.menuIds.forEach((element) => {
+                selectKeys.push(element.toString());
+              });
+            }
+            var permSelectKeys: string[] = [];
+            if (val.permissionIds != null) {
+              val.permissionIds.forEach((element) => {
+                permSelectKeys.push(element.toString());
+              });
+            }
+            checkedKeys.value = selectKeys;
+            permCheckedKeys.value = permSelectKeys;
+          });
         });
       });
       async function handleOk() {
         try {
-          const keys = getTree().getCheckedKeys() as any[];
+          const keys = getTree().getCheckedKeys() as string[];
+          const permKeys = getPermTree().getCheckedKeys() as string[];
 
           const res = (await validateFields()) as RoleEditParam;
           res.menus = keys;
+          res.permissions = permKeys;
           roleEditApi(res).then(() => {
             closeDrawer();
             useMessage().createMessage.info('角色修改成功');
@@ -162,6 +195,9 @@
         treeData,
         treeRef,
         checkedKeys,
+        treePermData,
+        treePermRef,
+        permCheckedKeys,
       };
     },
   });
