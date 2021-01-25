@@ -16,7 +16,7 @@ export interface MenuListItem {
   parentId: number;
   status: string;
   createdAt: string;
-  metaHidemenu: boolean;
+  metaHideMenu: boolean;
   metaHideTab: boolean;
   MetaCurrentActiveMenu: string;
   children?: MenuListItem[];
@@ -38,6 +38,7 @@ export interface MenuAddParam {
   parentId: string;
   isRoot: string;
   menuTye: string;
+  metaHideMenu: string;
 }
 
 export interface MenuDirOptionsItem {
@@ -57,6 +58,7 @@ export interface MenuEditParam {
   sort: string;
   parentId: string;
   menuTye: string;
+  metaHideMenu: string;
 }
 
 export interface MenuTreeOption {

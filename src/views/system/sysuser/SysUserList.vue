@@ -4,7 +4,7 @@
       <template #avatar="{ record }">
         <img
           :src="record.avatar == '' ? headerImg : record.avatar"
-          style="width: 40px; height: 40px; border-radius: 50%;"
+          :class="`${prefixCls}__header-img`"
         />
       </template>
       <template #action="{ record }">
@@ -48,6 +48,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { Alert } from 'ant-design-vue';
+  import { useDesign } from '/@/hooks/web/useDesign';
   import { useModal } from '/@/components/Modal';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { PageWrapper } from '/@/components/Page';
@@ -97,16 +98,6 @@
           true,
           {
             userId: record.userId,
-            username: record.username,
-            email: record.email,
-            phone: record.phone,
-            nickname: record.nickname,
-            sex: record.sex,
-            postId: record.postId.toString(),
-            postName: record.postName,
-            deptId: record.deptId.toString(),
-            deptName: record.deptName,
-            remark: record.remark,
           },
           true
         );
@@ -144,6 +135,8 @@
         });
       }
 
+      const { prefixCls } = useDesign('system-sysuser-modal');
+
       return {
         registerTable,
         handleEdit,
@@ -156,7 +149,20 @@
         registerResetPassword,
         registerEditRole,
         headerImg,
+        prefixCls,
       };
     },
   });
 </script>
+<style lang="less">
+  @prefix-cls: ~'@{namespace}-system-sysuser-modal';
+  .@{prefix-cls} {
+    &__header {
+      &-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+    }
+  }
+</style>

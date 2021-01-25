@@ -132,6 +132,19 @@
       componentProps: { api: () => dictDataOptionsApi('sys_common_status') },
       required: true,
     },
+    {
+      field: 'metaHideMenu',
+      component: 'RadioGroup',
+      label: '是否隐藏',
+      colProps: { span: 12 },
+      componentProps: {
+        options: [
+          { label: '是', value: '1' },
+          { label: '否', value: '0' },
+        ],
+      },
+      defaultValue: '0',
+    },
   ];
   export default defineComponent({
     components: { BasicDrawer, BasicForm },
@@ -159,6 +172,7 @@
             redirect: res.redirect,
             sort: res.sort,
             status: res.status,
+            metaHideMenu: res.metaHideMenu ? '1' : '0',
             menuType:
               res.component == 'LAYOUT'
                 ? '2'

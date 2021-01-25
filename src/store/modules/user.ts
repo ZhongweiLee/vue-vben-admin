@@ -1,6 +1,8 @@
 import type { LoginParams, GetUserInfoModel } from '/@/api/sys/model/userModel';
 
 import store from '/@/store/index';
+import { permissionStore } from '/@/store/modules/permission';
+
 import { VuexModule, Module, getModule, Mutation, Action } from 'vuex-module-decorators';
 import { hotModuleUnregisterModule } from '/@/utils/helper/vuexHelper';
 
@@ -125,6 +127,8 @@ class User extends VuexModule {
     const roleList = userInfo.role as RoleEnum[];
     this.commitUserInfoState(userInfo);
     this.commitRoleListState(roleList);
+    permissionStore.commitPermCodeListState(userInfo.permissions);
+
     return userInfo;
   }
 

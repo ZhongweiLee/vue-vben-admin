@@ -9,12 +9,7 @@
 
     <template #overlay>
       <Menu @click="handleMenuClick">
-        <MenuItem
-          key="doc"
-          :text="t('layout.header.dropdownItemDoc')"
-          icon="gg:loadbar-doc"
-          v-if="getShowDoc"
-        />
+        <MenuItem key="profile" :text="t('layout.header.dropdownItemProfile')" icon="gg:profile" />
         <MenuDivider />
         <MenuItem
           key="loginOut"
@@ -31,15 +26,14 @@
 
   import { defineComponent, computed } from 'vue';
 
+  import { useRouter } from 'vue-router';
+  import { PageEnum } from '/@/enums/pageEnum';
+
   // res
 
   import Icon from '/@/components/Icon/index';
 
   import { userStore } from '/@/store/modules/user';
-
-  import { DOC_URL } from '/@/settings/siteSetting';
-
-  import { openWindow } from '/@/utils';
 
   import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
   import { useI18n } from '/@/hooks/web/useI18n';
@@ -49,7 +43,7 @@
   import { propTypes } from '/@/utils/propTypes';
   import headerImg from '/@/assets/images/header.jpg';
 
-  type MenuEvent = 'loginOut' | 'doc';
+  type MenuEvent = 'loginOut' | 'profile';
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -66,7 +60,8 @@
     setup() {
       const { prefixCls } = useDesign('header-user-dropdown');
       const { t } = useI18n();
-      const { getShowDoc } = useHeaderSetting();
+
+      const { push } = useRouter();
 
       const getUserInfo = computed(() => {
         const { nickname = '' } = userStore.getUserInfoState || {};
@@ -78,18 +73,14 @@
         userStore.confirmLoginOut();
       }
 
-      // open doc
-      function openDoc() {
-        openWindow(DOC_URL);
-      }
-
       function handleMenuClick(e: { key: MenuEvent }) {
         switch (e.key) {
           case 'loginOut':
             handleLoginOut();
             break;
-          case 'doc':
-            openDoc();
+          case 'profile':
+            push(PageEnum.PROFILE).then(() => {});
+
             break;
         }
       }
@@ -99,7 +90,6 @@
         t,
         getUserInfo,
         handleMenuClick,
-        getShowDoc,
         headerImg,
       };
     },

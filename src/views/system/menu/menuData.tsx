@@ -65,6 +65,14 @@ export function getMenuListColumns(): BasicColumn[] {
       dataIndex: 'parentId',
       defaultHidden: true,
     },
+    {
+      title: '是否隐藏',
+      width: 80,
+      dataIndex: 'metaHideMenu',
+      customRender: ({ record }) => {
+        return record.metaHideMenu ? '是' : '否';
+      },
+    },
   ];
 }
 

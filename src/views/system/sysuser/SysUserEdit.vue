@@ -7,7 +7,7 @@
   import { defineComponent, ref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { sysUserUpdateApi } from '/@/api/system/sysuser/sysuser';
+  import { sysUserGetDetailApi, sysUserUpdateApi } from '/@/api/system/sysuser/sysuser';
   import { SysUserUpdateParams } from '/@/api/system/sysuser/model/sysuserModel';
   import { dictDataOptionsApi } from '/@/api/system/dict/dict';
   import { postOptionsApi } from '/@/api/system/post/post';
@@ -80,7 +80,6 @@
       label: '部门',
       defaultValue: 'model.deptId',
       componentProps: {
-        //options: 'model.deptOptions',
         api: () => deptOptionsApi(),
       },
       colProps: {
@@ -122,18 +121,18 @@
       });
 
       const [register, { closeModal }] = useModalInner((data) => {
-        setFieldsValue({
-          userId: data.userId,
-          phone: data.phone,
-          username: data.username,
-          email: data.email,
-          nickname: data.nickname,
-          sex: data.sex,
-          deptId: data.deptId,
-          deptName: data.deptName,
-          postId: data.postId,
-          postName: data.postName,
-          remark: data.remark,
+        sysUserGetDetailApi(data.userId).then((val) => {
+          setFieldsValue({
+            userId: val.userId,
+            username: val.username,
+            nickname: val.nickname,
+            phone: val.phone,
+            email: val.email,
+            sex: val.sex,
+            deptId: val.deptId.toString(),
+            postId: val.postId.toString(),
+            remark: val.remark,
+          });
         });
       });
 
