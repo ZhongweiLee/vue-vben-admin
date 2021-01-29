@@ -8,19 +8,26 @@
     <div :class="`${prefixCls}__date`">
       <div :class="`${prefixCls}__hour`">
         {{ hour }}
-        <span class="meridiem" v-show="showDate">{{ meridiem }}</span>
+        <span v-show="showDate" class="meridiem">{{ meridiem }}</span>
       </div>
-      <div :class="`${prefixCls}__minute`">{{ minute }} </div>
+      <div :class="`${prefixCls}__minute`">
+        {{ minute }}
+      </div>
     </div>
     <transition name="fade-slide">
-      <div :class="`${prefixCls}-entry`" v-show="!showDate">
+      <div v-show="!showDate" :class="`${prefixCls}-entry`">
         <div :class="`${prefixCls}-entry-content`">
           <div :class="`${prefixCls}-entry__header`">
-            <img :src="headerImg" :class="`${prefixCls}-entry__header-img`" />
-            <p :class="`${prefixCls}-entry__header-name`">{{ realName }}</p>
+            <img
+              :src="`${getUserInfo.avatar == '' ? headerImg : getUserInfo.avatar}`"
+              :class="`${prefixCls}-entry__header-img`"
+            />
+            <p :class="`${prefixCls}-entry__header-name`">
+              {{ getUserInfo.nickname }}
+            </p>
           </div>
-          <InputPassword :placeholder="t('sys.lock.placeholder')" v-model:value="password" />
-          <span :class="`${prefixCls}-entry__err-msg`" v-if="errMsgRef">
+          <InputPassword v-model:value="password" :placeholder="t('sys.lock.placeholder')" />
+          <span v-if="errMsgRef" :class="`${prefixCls}-entry__err-msg`">
             {{ t('sys.lock.alert') }}
           </span>
           <div :class="`${prefixCls}-entry__footer`">
@@ -42,7 +49,7 @@
             >
               {{ t('sys.lock.backToLogin') }}
             </a-button>
-            <a-button class="mt-2" type="link" size="small" @click="unLock()" :loading="loadingRef">
+            <a-button class="mt-2" type="link" size="small" :loading="loadingRef" @click="unLock()">
               {{ t('sys.lock.entry') }}
             </a-button>
           </div>
@@ -51,7 +58,7 @@
     </transition>
 
     <div :class="`${prefixCls}__footer-date`">
-      <div class="time" v-show="!showDate">
+      <div v-show="!showDate" class="time">
         {{ hour }}:{{ minute }} <span class="meridiem">{{ meridiem }}</span>
       </div>
       <div class="date"> {{ year }}/{{ month }}/{{ day }} {{ week }} </div>
@@ -88,9 +95,9 @@
 
       const { t } = useI18n();
 
-      const realName = computed(() => {
-        const { realName } = userStore.getUserInfoState || {};
-        return realName;
+      const getUserInfo = computed(() => {
+        const { nickname, avatar = headerImg } = userStore.getUserInfoState || {};
+        return { nickname, avatar };
       });
 
       /**
@@ -121,7 +128,7 @@
 
       return {
         goLogin,
-        realName,
+        getUserInfo,
         unLock,
         errMsgRef,
         loadingRef,
@@ -286,6 +293,7 @@
 
         &-img {
           width: 70px;
+          height: 70px;
           border-radius: 50%;
         }
 

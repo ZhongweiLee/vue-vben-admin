@@ -36,6 +36,8 @@ export interface GetUserInfoModel {
   username: string;
   // 真实名字
   nickname: string;
+  //头像
+  avatar: string;
 
   permissions: string[];
 }

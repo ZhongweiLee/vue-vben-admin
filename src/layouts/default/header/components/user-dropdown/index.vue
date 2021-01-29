@@ -1,7 +1,10 @@
 <template>
   <Dropdown placement="bottomLeft" :overlayClassName="`${prefixCls}-dropdown-overlay`">
     <span :class="[prefixCls, `${prefixCls}--${theme}`]">
-      <img :class="`${prefixCls}__header`" :src="headerImg" />
+      <img
+        :class="`${prefixCls}__header`"
+        :src="`${getUserInfo.avatar == '' ? headerImg : getUserInfo.avatar}`"
+      />
       <span :class="`${prefixCls}__info`">
         <span :class="`${prefixCls}__name anticon`">{{ getUserInfo.nickname }}</span>
       </span>
@@ -35,7 +38,6 @@
 
   import { userStore } from '/@/store/modules/user';
 
-  import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
   import { useI18n } from '/@/hooks/web/useI18n';
 
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -64,8 +66,8 @@
       const { push } = useRouter();
 
       const getUserInfo = computed(() => {
-        const { nickname = '' } = userStore.getUserInfoState || {};
-        return { nickname };
+        const { nickname = '', avatar = '' } = userStore.getUserInfoState || {};
+        return { nickname, avatar };
       });
 
       //  login out

@@ -8,8 +8,10 @@
   >
     <div :class="`${prefixCls}__entry`">
       <div :class="`${prefixCls}__header`">
-        <img :src="headerImg" :class="`${prefixCls}__header-img`" />
-        <p :class="`${prefixCls}__header-name`">{{ getRealName }}</p>
+        <img :src="`${avatar}`" :class="`${prefixCls}__header-img`" />
+        <p :class="`${prefixCls}__header-name`">
+          {{ getRealName }}
+        </p>
       </div>
 
       <BasicForm @register="registerForm" />
@@ -42,6 +44,12 @@
 
       const getRealName = computed(() => {
         return userStore.getUserInfoState?.nickname;
+      });
+
+      const avatar = computed(() => {
+        return userStore.getUserInfoState?.avatar == ''
+          ? headerImg
+          : userStore.getUserInfoState?.avatar;
       });
       const [register, { closeModal }] = useModalInner();
 
@@ -76,7 +84,7 @@
         register,
         registerForm,
         handleLock,
-        headerImg,
+        avatar,
       };
     },
   });
@@ -102,6 +110,7 @@
 
       &-img {
         width: 70px;
+        height: 70px;
         border-radius: 50%;
       }
 

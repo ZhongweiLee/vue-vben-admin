@@ -19,3 +19,7 @@ export interface UpdatePasswordParam {
   newPassword: string;
   newPasswordAgain: string;
 }
+
+export interface UpdateAvatarParam {
+  avatar: string;
+}

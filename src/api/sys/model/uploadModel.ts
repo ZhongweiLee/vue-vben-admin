@@ -3,3 +3,7 @@ export interface UploadApiResult {
   code: number;
   url: string;
 }
+
+export enum UploadDir {
+  Avatar = 'admin_avatar',
+}
