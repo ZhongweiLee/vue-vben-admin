@@ -34,8 +34,6 @@
 
   // res
 
-  import Icon from '/@/components/Icon/index';
-
   import { userStore } from '/@/store/modules/user';
 
   import { useI18n } from '/@/hooks/web/useI18n';
@@ -54,7 +52,6 @@
       Menu,
       MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
       MenuDivider: Menu.Divider,
-      Icon,
     },
     props: {
       theme: propTypes.oneOf(['dark', 'light']),
