@@ -4,22 +4,26 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { BasicTable, useTable } from '/@/components/Table';
-  import { getDeptListColumns } from './deptData';
-  import { deptListApi } from '/@/api/system/dept/dept';
+
+  import { getColumns, getFormConfig } from './tabData';
+
+  import { trailTabListApi } from '/@/api/biz/trail/tab/tab';
 
   export default defineComponent({
     components: { BasicTable },
     setup() {
       const [registerTable] = useTable({
-        title: '部门列表',
-        api: deptListApi,
-        columns: getDeptListColumns(),
-        rowKey: 'deptId',
-        isTreeTable: true,
-        indentSize: 20,
-        pagination: false,
+        title: '线路分类',
+        api: trailTabListApi,
+        columns: getColumns(),
+        useSearchForm: true,
+        formConfig: getFormConfig(),
         showTableSetting: false,
+        showIndexColumn: false,
+        ellipsis: true,
+        canResize: false,
       });
+
       return {
         registerTable,
       };

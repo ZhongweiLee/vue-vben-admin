@@ -79,7 +79,7 @@
         columns: getSysUserListColumns(),
         useSearchForm: true,
         formConfig: getSysUserListFormConfig(),
-        showTableSetting: true,
+        showTableSetting: false,
         showIndexColumn: false,
         actionColumn: {
           width: 200,

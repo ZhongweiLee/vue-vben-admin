@@ -1,7 +1,5 @@
 <template>
-  <BasicTable @register="registerTable">
-    <template #form-custom> custom-slot </template>
-  </BasicTable>
+  <BasicTable @register="registerTable" />
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
@@ -19,7 +17,7 @@
         columns: getLoginLogColumns(),
         useSearchForm: true,
         formConfig: getLoginLogFormConfig(),
-        showTableSetting: true,
+        showTableSetting: false,
         showIndexColumn: false,
       });
 

@@ -61,6 +61,7 @@
           slots: { customRender: 'action' },
         },
         pagination: false,
+        showTableSetting: false,
       });
 
       const [registerAdd, { openModal: openModalAdd }] = useModal();

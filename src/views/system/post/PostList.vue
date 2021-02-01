@@ -38,7 +38,7 @@
         columns: getPostListColumns(),
         useSearchForm: true,
         formConfig: getPostListFormConfig(),
-        showTableSetting: true,
+        showTableSetting: false,
         showIndexColumn: false,
         actionColumn: {
           width: 160,

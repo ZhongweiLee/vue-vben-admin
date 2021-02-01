@@ -41,7 +41,7 @@
         columns: getDictDataColumns(),
         useSearchForm: true,
         formConfig: getDictDataFormConfig(),
-        showTableSetting: true,
+        showTableSetting: false,
         showIndexColumn: false,
         actionColumn: {
           width: 100,
