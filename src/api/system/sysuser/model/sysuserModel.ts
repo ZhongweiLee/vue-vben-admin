@@ -67,6 +67,7 @@ export interface SysUserDetail {
   createdAt: string;
   remark: string;
   deptName: string;
+  deptId: number;
   postId: number;
   roleIds: number[];
 }

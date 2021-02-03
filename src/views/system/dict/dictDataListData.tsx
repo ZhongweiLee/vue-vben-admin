@@ -29,7 +29,7 @@ export function getDictDataColumns(): BasicColumn[] {
     {
       title: '状态',
       dataIndex: 'status',
-      width: 50,
+      width: 100,
       customRender: ({ record }) => {
         const color = record.status === '1' ? 'green' : 'red';
         const text = record.status === '1' ? '正常' : '失效';
