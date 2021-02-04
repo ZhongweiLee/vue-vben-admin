@@ -117,11 +117,11 @@
   import Icon from '/@/components/Icon/index';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { CollapseContainer } from '/@/components/Container/index';
-  import { schemas, getStateLabel } from './trailData';
+  import { schemas } from './trailData';
   import { PageWrapper } from '/@/components/Page';
   import { List, Tag, Spin } from 'ant-design-vue';
   import moment from 'moment';
-  import { TrailItem } from '/@/api/biz/trail/trail/model/trailModel';
+  import { TrailItem, getStateLabel } from '/@/api/biz/trail/trail/model/trailModel';
   import { trailListApi } from '/@/api/biz/trail/trail/trail';
 
   export default defineComponent({

@@ -63,3 +63,24 @@ export interface TrailDetail extends TrailItem {
  * @description: trail list
  */
 export type TrailListGetResultModel = BasicFetchResult<TrailItem[]>;
+
+export function getStateLabel(state: number): string {
+  if (state == 0) {
+    return '删除';
+  } else if (state == 1) {
+    return '已发布';
+  } else if (state == 2) {
+    return '草稿';
+  } else if (state == 3) {
+    return '用户删除';
+  } else if (state == 4) {
+    return '待审核';
+  } else if (state == 5) {
+    return '审核不通过';
+  } else if (state == 6) {
+    return '平台下架';
+  }
+  return '';
+}
+
+export type TrailDetailResult = TrailDetail;

@@ -4,18 +4,22 @@ export const trailSchema: DescItem[] = [
   {
     field: 'id',
     label: '线路ID',
+    span: 24,
   },
   {
     field: 'shortName',
     label: '简称',
+    span: 24,
   },
   {
     field: 'title',
     label: '标题',
+    span: 24,
   },
   {
     field: 'content',
     label: '内容',
+    span: 24,
   },
   {
     field: 'auditRemark',
@@ -41,10 +45,12 @@ export const trailSchema: DescItem[] = [
   {
     field: 'province',
     label: '省份',
+    span: 24,
   },
   {
     field: 'destination',
     label: '目的地',
+    span: 24,
   },
   {
     field: 'itemPic',
