@@ -13,17 +13,17 @@ export function getDictDataColumns(): BasicColumn[] {
     },
     {
       title: '字典编码',
-      width: 120,
+      width: 150,
       dataIndex: 'dictType',
     },
     {
       title: '名称',
       dataIndex: 'dictLabel',
-      width: 50,
+      width: 100,
     },
     {
       title: '值',
-      width: 100,
+      width: 50,
       dataIndex: 'dictValue',
     },
     {
@@ -39,11 +39,11 @@ export function getDictDataColumns(): BasicColumn[] {
     {
       title: '备注',
       dataIndex: 'remark',
-      width: 80,
+      width: 100,
     },
     {
       title: '创建人',
-      width: 40,
+      width: 100,
       dataIndex: 'createBy',
     },
     {

@@ -154,7 +154,7 @@
           span: 24,
         },
       });
-      const [register, { closeDrawer }] = useDrawerInner((data) => {
+      const [register, { closeDrawer }] = useDrawerInner(() => {
         // 清空表单
         setFieldsValue({});
       });

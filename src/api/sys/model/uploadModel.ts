@@ -1,7 +1,7 @@
 export interface UploadApiResult {
   message: string;
-  code: number;
-  url: string;
+  status: number;
+  data: string;
 }
 
 export enum UploadDir {

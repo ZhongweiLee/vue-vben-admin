@@ -66,7 +66,7 @@
 
       const { uploadUrl } = useGlobSetting();
       const headers = {
-        Authorization: getToken(),
+        Authorization: 'Bearer ' + getToken(),
         Platform: 'admin',
       };
 
