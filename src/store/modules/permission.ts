@@ -1,29 +1,30 @@
 import type { AppRouteRecordRaw, Menu } from '/@/router/types';
-import store from '/@/store/index';
-import { hotModuleUnregisterModule } from '/@/utils/helper/vuexHelper';
 
+import store from '/@/store';
+import { toRaw } from 'vue';
 import { VuexModule, Mutation, Module, getModule, Action } from 'vuex-module-decorators';
+
+import { hotModuleUnregisterModule } from '/@/utils/helper/vuexHelper';
 
 import { PermissionModeEnum } from '/@/enums/appEnum';
 
 import { appStore } from '/@/store/modules/app';
 import { userStore } from '/@/store/modules/user';
+import projectSetting from '/@/settings/projectSetting';
 
 import { asyncRoutes } from '/@/router/routes';
-import { filter } from '/@/utils/helper/treeHelper';
-import { toRaw } from 'vue';
-import { getMenuListById } from '/@/api/sys/menu';
-
-import { transformObjToRoute } from '/@/router/helper/routeHelper';
+import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
+import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
 import { transformRouteToMenu } from '/@/router/helper/menuHelper';
 
-import { useMessage } from '/@/hooks/web/useMessage';
-// import { warn } from '/@/utils/log';
-import { useI18n } from '/@/hooks/web/useI18n';
-import { PAGE_NOT_FOUND_ROUTE } from '/@/router/constant';
+import { filter } from '/@/utils/helper/treeHelper';
 
-const { createMessage } = useMessage();
-const NAME = 'permission';
+import { getMenuListById } from '/@/api/sys/menu';
+
+import { useMessage } from '/@/hooks/web/useMessage';
+import { useI18n } from '/@/hooks/web/useI18n';
+
+const NAME = 'app-permission';
 hotModuleUnregisterModule(NAME);
 @Module({ dynamic: true, namespaced: true, store, name: NAME })
 class Permission extends VuexModule {
@@ -88,19 +89,23 @@ class Permission extends VuexModule {
     const { t } = useI18n();
     let routes: AppRouteRecordRaw[] = [];
     const roleList = toRaw(userStore.getRoleListState);
-
-    const { permissionMode } = appStore.getProjectConfig;
-
+    const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig;
     // role permissions
     if (permissionMode === PermissionModeEnum.ROLE) {
-      routes = filter(asyncRoutes, (route) => {
-        const { meta } = route as AppRouteRecordRaw;
+      const routeFilter = (route: AppRouteRecordRaw) => {
+        const { meta } = route;
         const { roles } = meta || {};
         if (!roles) return true;
         return roleList.some((role) => roles.includes(role));
-      });
-      //  如果确定不需要做后台动态权限,请将下面整个判断注释
+      };
+      routes = filter(asyncRoutes, routeFilter);
+      routes = routes.filter(routeFilter);
+      // Convert multi-level routing to level 2 routing
+      routes = flatMultiLevelRoutes(routes);
+      //  If you are sure that you do not need to do background dynamic permissions, please comment the entire judgment below
     } else if (permissionMode === PermissionModeEnum.BACK) {
+      const { createMessage } = useMessage();
+
       createMessage.loading({
         content: t('sys.app.menuLoading'),
         duration: 1,
@@ -112,15 +117,17 @@ class Permission extends VuexModule {
       //       }
       let routeList = (await getMenuListById()) as AppRouteRecordRaw[];
 
-      // 动态引入组件
+      // Dynamically introduce components
       routeList = transformObjToRoute(routeList);
-      //  后台路由转菜单结构
-      const backMenuList = transformRouteToMenu(routeList);
 
+      //  Background routing to menu structure
+      const backMenuList = transformRouteToMenu(routeList);
       this.commitBackMenuListState(backMenuList);
 
+      routeList = flatMultiLevelRoutes(routeList);
       routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
     }
+    routes.push(ERROR_LOG_ROUTE);
     return routes;
   }
 }

@@ -15,13 +15,19 @@
         <MenuItem key="profile" :text="t('layout.header.dropdownItemProfile')" icon="gg:profile" />
         <MenuDivider />
         <MenuItem
-          key="loginOut"
+          key="lock"
+          :text="t('layout.header.tooltipLock')"
+          icon="ion:lock-closed-outline"
+        />
+        <MenuItem
+          key="logout"
           :text="t('layout.header.dropdownItemLoginOut')"
-          icon="carbon:power"
+          icon="ion:power-outline"
         />
       </Menu>
     </template>
   </Dropdown>
+  <LockAction @register="register" />
 </template>
 <script lang="ts">
   // components
@@ -37,11 +43,13 @@
   import { userStore } from '/@/store/modules/user';
 
   import { useI18n } from '/@/hooks/web/useI18n';
-
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
-  import { propTypes } from '/@/utils/propTypes';
+  import { useModal } from '/@/components/Modal';
+
   import headerImg from '/@/assets/images/header.jpg';
+  import { propTypes } from '/@/utils/propTypes';
+
+  import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
   type MenuEvent = 'loginOut' | 'profile';
 
@@ -52,6 +60,7 @@
       Menu,
       MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
       MenuDivider: Menu.Divider,
+      LockAction: createAsyncComponent(() => import('../lock/LockModal.vue')),
     },
     props: {
       theme: propTypes.oneOf(['dark', 'light']),
@@ -67,6 +76,12 @@
         return { nickname, avatar };
       });
 
+      const [register, { openModal }] = useModal();
+
+      function handleLock() {
+        openModal(true);
+      }
+
       //  login out
       function handleLoginOut() {
         userStore.confirmLoginOut();
@@ -74,12 +89,15 @@
 
       function handleMenuClick(e: { key: MenuEvent }) {
         switch (e.key) {
-          case 'loginOut':
+          case 'logout':
             handleLoginOut();
             break;
           case 'profile':
             push(PageEnum.PROFILE).then(() => {});
 
+            break;
+          case 'lock':
+            handleLock();
             break;
         }
       }
@@ -90,6 +108,7 @@
         getUserInfo,
         handleMenuClick,
         headerImg,
+        register,
       };
     },
   });
@@ -98,9 +117,7 @@
   @prefix-cls: ~'@{namespace}-header-user-dropdown';
 
   .@{prefix-cls} {
-    display: flex;
     height: @header-height;
-    min-width: 100px;
     padding: 0 0 0 10px;
     padding-right: 10px;
     overflow: hidden;

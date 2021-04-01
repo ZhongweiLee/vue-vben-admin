@@ -13,7 +13,10 @@ export interface GetUserInfoByUserIdParams {
   userId: string | number;
 }
 
-export type RoleInfo = string[];
+export interface RoleInfo {
+  roleName: string;
+  value: string;
+}
 
 /**
  * @description: Login interface return value
@@ -29,7 +32,7 @@ export interface LoginResultModel {
  * @description: Get user information return value
  */
 export interface GetUserInfoModel {
-  role: RoleInfo;
+  roles: RoleInfo[];
   // 用户id
   userId: string | number;
   // 用户名

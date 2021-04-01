@@ -54,7 +54,7 @@ export default defineComponent({
           <div class={`${prefixCls}__entry`}>
             <div class={`${prefixCls}__header`}>
               <img src={headerImg} class={`${prefixCls}__header-img`} />
-              <p class={`${prefixCls}__header-name`}>{userStore.getUserInfoState.nickname}</p>
+              <p class={`${prefixCls}__header-name`}>{userStore.getUserInfoState.realName}</p>
             </div>
 
             <BasicForm onRegister={registerForm} />
