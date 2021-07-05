@@ -77,16 +77,33 @@
         <a-descriptions-item label="成熟度">
           <a-rate :count="7" :value="maturity" :disabled="true" />
         </a-descriptions-item>
+        <a-descriptions-item label="分类标签">
+          <template v-for="(tab, index) in tabTags" :key="index">
+            <Tag class="mb-2" color="green">
+              {{ tab }}
+            </Tag>
+          </template>
+        </a-descriptions-item>
+        <a-descriptions-item label="目的地标签">
+          <template v-for="(area, index) in areaTags" :key="index">
+            <Tag class="mb-2" color="green">
+              {{ area }}
+            </Tag>
+          </template>
+        </a-descriptions-item>
+
+        <a-descriptions-item label="高山向导">
+          <Tag class="mb-2" color="red" v-if="dataRef.needMountainGuide"> 必须 </Tag>
+          <Tag class="mb-2" color="green" v-if="dataRef.needMountainGuide == false"> 非必须 </Tag>
+        </a-descriptions-item>
+
         <a-descriptions-item label="创建时间">
           {{ moment(dataRef.createTime).format('YYYY-MM-DD HH:mm:ss') }}
         </a-descriptions-item>
         <a-descriptions-item label="修改时间">
           {{ moment(dataRef.updateTime).format('YYYY-MM-DD HH:mm:ss') }}
         </a-descriptions-item>
-        <a-descriptions-item label="高山向导">
-          <Tag class="mb-2" color="red" v-if="dataRef.needMountainGuide"> 必须 </Tag>
-          <Tag class="mb-2" color="green" v-if="dataRef.needMountainGuide == false"> 非必须 </Tag>
-        </a-descriptions-item>
+        <a-descriptions-item />
         <a-descriptions-item :span="3">
           <h3>{{ dataRef.title }}</h3>
         </a-descriptions-item>
@@ -260,10 +277,14 @@
       </a-card>
 
       <a-card>
-        <a-button type="primary" @click="handleAudit"> 审核 </a-button>
+        <a-button type="primary" class="ml-4" @click="handleAudit"> 审核 </a-button>
+        <a-button type="primary" class="ml-4" @click="handleTag"> 标签维护 </a-button>
+        <a-button type="primary" class="ml-4" @click="handleNavi"> 添加到导航 </a-button>
       </a-card>
     </div>
     <TrailAudit @register="registerAudit" />
+    <TrailTag @register="registerTag" />
+    <TrailNavi @register="registerNavi" />
   </PageWrapper>
 </template>
 
@@ -273,8 +294,6 @@
   import { useModal } from '/@/components/Modal';
   import { PageWrapper } from '/@/components/Page';
   import Icon from '/@/components/Icon/index';
-  import { Description } from '/@/components/Description/index';
-  import { BasicTable } from '/@/components/Table';
   import { Divider, Card, Descriptions, Tag, Rate, Image } from 'ant-design-vue';
   import moment from 'moment';
 
@@ -282,12 +301,12 @@
   import { trailDetailApi } from '/@/api/biz/trail/trail/trail';
 
   import TrailAudit from './TrailAudit.vue';
+  import TrailTag from './TrailTag.vue';
+  import TrailNavi from './TrailNavi.vue';
 
   export default defineComponent({
     components: {
       PageWrapper,
-      Description,
-      BasicTable,
       [Divider.name]: Divider,
       [Card.name]: Card,
       [Descriptions.name]: Descriptions,
@@ -296,9 +315,9 @@
       [Image.name]: Image,
       Icon,
       Tag,
-      Rate,
-      Image,
       TrailAudit,
+      TrailTag,
+      TrailNavi,
     },
     setup() {
       const sceneryStar = ref<Number>(0);
@@ -306,12 +325,16 @@
       const maturity = ref<Number>(0);
       const { currentRoute } = useRouter();
       const dataRef = ref<Recordable>({});
+      const areaTags = ref<string[]>([]);
+      const tabTags = ref<string[]>([]);
 
       onBeforeMount(async () => {
         var trailId = unref(currentRoute).params.id;
         var detail = await trailDetailApi(trailId as string);
 
         dataRef.value = detail;
+        areaTags.value = detail.areaTags.split(',');
+        tabTags.value = detail.tabTags.split(',');
         sceneryStar.value = detail.sceneryStar;
         hardship.value = detail.hardship;
         maturity.value = detail.maturity;
@@ -322,8 +345,28 @@
         openModalAudit(true, { trailId: dataRef.value.id }, true);
       }
 
+      const [registerTag, { openModal: openModalTag }] = useModal();
+      function handleTag() {
+        openModalTag(true, { trailId: dataRef.value.id }, true);
+      }
+
+      const [registerNavi, { openModal: openModalNavi }] = useModal();
+      function handleNavi() {
+        openModalNavi(
+          true,
+          {
+            trailId: dataRef.value.id,
+            envelopePic: dataRef.value.envelopePic,
+            name: dataRef.value.shortName,
+          },
+          true
+        );
+      }
+
       return {
         dataRef,
+        areaTags,
+        tabTags,
         prefixCls: 'trail-detail',
         moment,
         getStateLabel,
@@ -332,7 +375,11 @@
         hardship,
         maturity,
         handleAudit,
+        handleTag,
+        handleNavi,
         registerAudit,
+        registerTag,
+        registerNavi,
       };
     },
   });

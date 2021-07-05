@@ -1,5 +1,6 @@
 import { defHttp } from '/@/utils/http/axios';
 import {
+  AddTagTrailParam,
   AddTrailParam,
   AuditParam,
   TrailDetail,
@@ -13,6 +14,7 @@ enum Api {
   detailUri = '/trail/detail',
   addUri = '/trail/addTrail',
   auidtUri = '/trail/auditTrail',
+  tagTrailUri = '/trail/tagTrail',
 }
 
 /**
@@ -45,8 +47,17 @@ export function trailAddApi(params: AddTrailParam) {
 }
 
 export function auditTrailApi(params: AuditParam) {
-  return defHttp.request<AddTrailParam>({
+  return defHttp.request<AuditParam>({
     url: Api.auidtUri,
+    method: 'POST',
+    params,
+    headers: {},
+  });
+}
+
+export function tagTrailApi(params: AddTagTrailParam) {
+  return defHttp.request<AddTagTrailParam>({
+    url: Api.tagTrailUri,
     method: 'POST',
     params,
     headers: {},

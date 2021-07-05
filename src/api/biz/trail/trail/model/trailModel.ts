@@ -39,6 +39,8 @@ export interface TrailItem {
   needMountainGuide: boolean;
   altitudeImageUrl: string;
   isoheightImageUrl: string;
+  tabTags: string;
+  areaTags: string;
 }
 
 export interface TrailDetail extends TrailItem {
@@ -109,6 +111,11 @@ export interface AuditParam {
   auditRemark: string;
 }
 
+export interface AddTagTrailParam {
+  trailId: number;
+  areaTags: string[];
+  tabTags: string[];
+}
 /**
  * @description: trail list
  */
