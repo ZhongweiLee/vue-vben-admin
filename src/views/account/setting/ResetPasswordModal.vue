@@ -9,7 +9,6 @@
   import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
   import { UpdatePasswordParam } from '/@/api/account/model/accountModel';
   import { accountUpdatePasswordApi } from '/@/api/account/account';
-  import { error } from '/@/utils/log';
 
   const schemas: FormSchema[] = [
     {

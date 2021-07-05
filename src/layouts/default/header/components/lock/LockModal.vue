@@ -31,8 +31,8 @@
   import { BasicModal, useModalInner } from '/@/components/Modal/index';
   import { BasicForm, useForm } from '/@/components/Form/index';
 
-  import { userStore } from '/@/store/modules/user';
-  import { lockStore } from '/@/store/modules/lock';
+  import { useUserStore } from '/@/store/modules/user';
+  import { useLockStore } from '/@/store/modules/lock';
   import headerImg from '/@/assets/images/header.jpg';
   export default defineComponent({
     name: 'LockModal',
@@ -41,16 +41,13 @@
     setup() {
       const { t } = useI18n();
       const { prefixCls } = useDesign('header-lock-modal');
+      const userStore = useUserStore();
+      const lockStore = useLockStore();
 
       const getRealName = computed(() => {
-        return userStore.getUserInfoState?.nickname;
+        return userStore.getUserInfo?.nickname;
       });
 
-      const avatar = computed(() => {
-        return userStore.getUserInfoState?.avatar == ''
-          ? headerImg
-          : userStore.getUserInfoState?.avatar;
-      });
       const [register, { closeModal }] = useModalInner();
 
       const [registerForm, { validateFields, resetFields }] = useForm({
@@ -70,12 +67,17 @@
         const password: string | undefined = values.password;
         closeModal();
 
-        lockStore.commitLockInfoState({
+        lockStore.setLockInfo({
           isLock: true,
           pwd: password,
         });
         await resetFields();
       }
+
+      const avatar = computed(() => {
+        const { avatar } = userStore.getUserInfo;
+        return avatar || headerImg;
+      });
 
       return {
         t,
@@ -95,9 +97,8 @@
   .@{prefix-cls} {
     &__entry {
       position: relative;
-      height: 240px;
-      padding: 130px 30px 60px 30px;
-      background: #fff;
+      //height: 240px;
+      padding: 130px 30px 30px 30px;
       border-radius: 10px;
     }
 

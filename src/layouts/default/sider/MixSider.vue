@@ -81,24 +81,19 @@
   import type { Menu } from '/@/router/types';
   import type { CSSProperties } from 'vue';
   import type { RouteLocationNormalized } from 'vue-router';
-
   import { defineComponent, onMounted, ref, computed, unref } from 'vue';
-
   import { ScrollContainer } from '/@/components/Container';
   import { SimpleMenuTag } from '/@/components/SimpleMenu';
-  import Icon from '/@/components/Icon';
+  import { Icon } from '/@/components/Icon';
   import { AppLogo } from '/@/components/Application';
   import Trigger from '../trigger/HeaderTrigger.vue';
-
   import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
   import { useDragLine } from './useLayoutSider';
   import { useGlobSetting } from '/@/hooks/setting';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useGo } from '/@/hooks/web/usePage';
-
   import { SIDE_BAR_SHOW_TIT_MINI_WIDTH, SIDE_BAR_MINI_WIDTH } from '/@/enums/appEnum';
-
   import clickOutside from '/@/directives/clickOutside';
   import { getShallowMenus, getChildrenMenus, getCurrentParentPath } from '/@/router/menus';
   import { listenerRouteChange } from '/@/logics/mitt/routeChange';
@@ -147,14 +142,12 @@
 
       useDragLine(sideRef, dragBarRef, true);
 
-      const getMenuStyle = computed(
-        (): CSSProperties => {
-          return {
-            width: unref(openMenu) ? `${unref(getMenuWidth)}px` : 0,
-            left: `${unref(getMixSideWidth)}px`,
-          };
-        }
-      );
+      const getMenuStyle = computed((): CSSProperties => {
+        return {
+          width: unref(openMenu) ? `${unref(getMenuWidth)}px` : 0,
+          left: `${unref(getMixSideWidth)}px`,
+        };
+      });
 
       const getIsFixed = computed(() => {
         /* eslint-disable-next-line */
@@ -171,20 +164,16 @@
         return unref(getCollapsed) ? SIDE_BAR_MINI_WIDTH : SIDE_BAR_SHOW_TIT_MINI_WIDTH;
       });
 
-      const getDomStyle = computed(
-        (): CSSProperties => {
-          const fixedWidth = unref(getIsFixed) ? unref(getRealWidth) : 0;
-          const width = `${unref(getMixSideWidth) + fixedWidth}px`;
-          return getWrapCommonStyle(width);
-        }
-      );
+      const getDomStyle = computed((): CSSProperties => {
+        const fixedWidth = unref(getIsFixed) ? unref(getRealWidth) : 0;
+        const width = `${unref(getMixSideWidth) + fixedWidth}px`;
+        return getWrapCommonStyle(width);
+      });
 
-      const getWrapStyle = computed(
-        (): CSSProperties => {
-          const width = `${unref(getMixSideWidth)}px`;
-          return getWrapCommonStyle(width);
-        }
-      );
+      const getWrapStyle = computed((): CSSProperties => {
+        const width = `${unref(getMixSideWidth)}px`;
+        return getWrapCommonStyle(width);
+      });
 
       const getMenuEvents = computed(() => {
         return !unref(getMixSideFixed)
@@ -344,7 +333,7 @@
     z-index: @layout-mix-sider-fixed-z-index;
     height: 100%;
     overflow: hidden;
-    background: @sider-dark-bg-color;
+    background-color: @sider-dark-bg-color;
     transition: all 0.2s ease 0s;
 
     &-dom {
@@ -383,7 +372,7 @@
 
           &--active {
             color: @primary-color;
-            background: unset;
+            background-color: unset;
           }
         }
       }
@@ -403,7 +392,7 @@
         }
       }
     }
-    @border-color: @sider-dark-lighten-1-bg-color;
+    @border-color: @sider-dark-lighten-bg-color;
 
     &.dark {
       &.open {
@@ -416,7 +405,7 @@
         }
       }
       .@{prefix-cls}-menu-list {
-        background: @sider-dark-bg-color;
+        background-color: @sider-dark-bg-color;
 
         &__title {
           color: @white;
@@ -459,7 +448,7 @@
         &--active {
           font-weight: 700;
           color: @white;
-          background: @sider-dark-darken-bg-color;
+          background-color: @sider-dark-darken-bg-color;
 
           &::before {
             position: absolute;
@@ -467,7 +456,7 @@
             left: 0;
             width: 3px;
             height: 100%;
-            background: @primary-color;
+            background-color: @primary-color;
             content: '';
           }
         }
@@ -496,12 +485,12 @@
       font-size: 18px;
       color: rgba(255, 255, 255, 0.65);
       cursor: pointer;
-      background: @sider-dark-bg-color;
+      background-color: @sider-dark-bg-color;
     }
 
     &.light &-trigger {
       color: rgba(0, 0, 0, 0.65);
-      background: #fff;
+      background-color: #fff;
     }
 
     &-menu-list {
@@ -510,7 +499,7 @@
       width: 0;
       width: 200px;
       height: calc(100%);
-      background: #fff;
+      background-color: #fff;
       transition: all 0.2s;
 
       &__title {
@@ -573,7 +562,7 @@
       width: 1px;
       height: calc(100% - 50px);
       cursor: ew-resize;
-      background: #f8f8f9;
+      background-color: #f8f8f9;
       border-top: none;
       border-bottom: none;
       box-shadow: 0 0 4px 0 rgba(28, 36, 56, 0.15);

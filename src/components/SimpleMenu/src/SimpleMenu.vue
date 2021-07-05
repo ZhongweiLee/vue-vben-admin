@@ -1,11 +1,11 @@
 <template>
   <Menu
     v-bind="getBindValues"
-    @select="handleSelect"
     :activeName="activeName"
     :openNames="getOpenKeys"
     :class="prefixCls"
     :activeSubMenuNames="activeSubMenuNames"
+    @select="handleSelect"
   >
     <template v-for="item in items" :key="item.path">
       <SimpleSubMenu
@@ -20,17 +20,17 @@
 <script lang="ts">
   import type { MenuState } from './types';
   import type { Menu as MenuType } from '/@/router/types';
-
+  import type { RouteLocationNormalizedLoaded } from 'vue-router';
   import { defineComponent, computed, ref, unref, reactive, toRefs, watch } from 'vue';
   import { useDesign } from '/@/hooks/web/useDesign';
-
   import Menu from './components/Menu.vue';
   import SimpleSubMenu from './SimpleSubMenu.vue';
   import { listenerRouteChange } from '/@/logics/mitt/routeChange';
   import { propTypes } from '/@/utils/propTypes';
   import { REDIRECT_NAME } from '/@/router/constant';
-  import { RouteLocationNormalizedLoaded, useRouter } from 'vue-router';
-  import { isFunction } from '/@/utils/is';
+  import { useRouter } from 'vue-router';
+  import { isFunction, isUrl } from '/@/utils/is';
+  import { openWindow } from '/@/utils';
 
   import { useOpenKeys } from './useOpenKeys';
   export default defineComponent({
@@ -53,6 +53,7 @@
       beforeClickFn: {
         type: Function as PropType<(key: string) => Promise<boolean>>,
       },
+      isSplitMenu: propTypes.bool,
     },
     emits: ['menuClick'],
     setup(props, { attrs, emit }) {
@@ -94,6 +95,9 @@
       watch(
         () => props.items,
         () => {
+          if (!props.isSplitMenu) {
+            return;
+          }
           setOpenKeys(currentRoute.value.path);
         },
         { flush: 'post' }
@@ -117,17 +121,23 @@
           return;
         }
         const path = (route || unref(currentRoute)).path;
+
         menuState.activeName = path;
 
         setOpenKeys(path);
       }
 
       async function handleSelect(key: string) {
+        if (isUrl(key)) {
+          openWindow(key);
+          return;
+        }
         const { beforeClickFn } = props;
         if (beforeClickFn && isFunction(beforeClickFn)) {
           const flag = await beforeClickFn(key);
           if (!flag) return;
         }
+
         emit('menuClick', key);
 
         isClickGo.value = true;

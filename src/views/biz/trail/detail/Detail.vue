@@ -69,13 +69,13 @@
           </div>
         </a-descriptions-item>
         <a-descriptions-item label="风景指数">
-          <a-rate :count="7" :value="sceneryStar" :disabled="true" />
+          <span>{{ dataRef.sceneryStar }} 星</span>
         </a-descriptions-item>
         <a-descriptions-item label="线路难度">
-          <a-rate :count="7" :value="hardship" :disabled="true" />
+          <span>{{ dataRef.hardship }} 星</span>
         </a-descriptions-item>
         <a-descriptions-item label="成熟度">
-          <a-rate :count="7" :value="maturity" :disabled="true" />
+          <span>{{ dataRef.maturity }} 星</span>
         </a-descriptions-item>
         <a-descriptions-item label="分类标签">
           <template v-for="(tab, index) in tabTags" :key="index">
@@ -294,7 +294,7 @@
   import { useModal } from '/@/components/Modal';
   import { PageWrapper } from '/@/components/Page';
   import Icon from '/@/components/Icon/index';
-  import { Divider, Card, Descriptions, Tag, Rate, Image } from 'ant-design-vue';
+  import { Divider, Card, Descriptions, Tag, Image } from 'ant-design-vue';
   import moment from 'moment';
 
   import { getStateLabel, getAuditStateLabel } from '/@/api/biz/trail/trail/model/trailModel';
@@ -311,7 +311,6 @@
       [Card.name]: Card,
       [Descriptions.name]: Descriptions,
       [Descriptions.Item.name]: Descriptions.Item,
-      [Rate.name]: Rate,
       [Image.name]: Image,
       Icon,
       Tag,
@@ -320,9 +319,6 @@
       TrailNavi,
     },
     setup() {
-      const sceneryStar = ref<Number>(0);
-      const hardship = ref<Number>(0);
-      const maturity = ref<Number>(0);
       const { currentRoute } = useRouter();
       const dataRef = ref<Recordable>({});
       const areaTags = ref<string[]>([]);
@@ -335,9 +331,6 @@
         dataRef.value = detail;
         areaTags.value = detail.areaTags.split(',');
         tabTags.value = detail.tabTags.split(',');
-        sceneryStar.value = detail.sceneryStar;
-        hardship.value = detail.hardship;
-        maturity.value = detail.maturity;
       });
 
       const [registerAudit, { openModal: openModalAudit }] = useModal();
@@ -371,9 +364,6 @@
         moment,
         getStateLabel,
         getAuditStateLabel,
-        sceneryStar,
-        hardship,
-        maturity,
         handleAudit,
         handleTag,
         handleNavi,

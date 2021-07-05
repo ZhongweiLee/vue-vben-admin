@@ -1,9 +1,7 @@
 import type { ComputedRef, Ref } from 'vue';
 import type { FormProps, FormSchema, FormActionType } from '../types/form';
 import type { NamePath } from 'ant-design-vue/lib/form/interface';
-
 import { unref, toRaw } from 'vue';
-
 import { isArray, isFunction, isObject, isString } from '/@/utils/is';
 import { deepMerge } from '/@/utils';
 import { dateItemType, handleInputNumberValue } from '../helper';
@@ -67,13 +65,18 @@ export function useFormEvents({
         // time type
         if (itemIsDateType(key)) {
           if (Array.isArray(value)) {
-            const arr: moment.Moment[] = [];
+            const arr: any[] = [];
             for (const ele of value) {
-              arr.push(dateUtil(ele));
+              arr.push(ele ? dateUtil(ele) : null);
             }
             formModel[key] = arr;
           } else {
-            formModel[key] = dateUtil(value);
+            const { componentProps } = schema || {};
+            let _props = componentProps as any;
+            if (typeof componentProps === 'function') {
+              _props = _props({ formModel });
+            }
+            formModel[key] = value ? (_props?.valueFormat ? value : dateUtil(value)) : null;
           }
         } else {
           formModel[key] = value;
@@ -88,7 +91,9 @@ export function useFormEvents({
    */
   async function removeSchemaByFiled(fields: string | string[]): Promise<void> {
     const schemaList: FormSchema[] = cloneDeep(unref(getSchema));
-    if (!fields) return;
+    if (!fields) {
+      return;
+    }
 
     let fieldList: string[] = isString(fields) ? [fields] : fields;
     if (isString(fields)) {
@@ -107,6 +112,7 @@ export function useFormEvents({
     if (isString(field)) {
       const index = schemaList.findIndex((schema) => schema.field === field);
       if (index !== -1) {
+        delete formModel[field];
         schemaList.splice(index, 1);
       }
     }
@@ -132,6 +138,26 @@ export function useFormEvents({
       schemaList.splice(index + 1, 0, schema);
     }
     schemaRef.value = schemaList;
+  }
+
+  async function resetSchema(data: Partial<FormSchema> | Partial<FormSchema>[]) {
+    let updateData: Partial<FormSchema>[] = [];
+    if (isObject(data)) {
+      updateData.push(data as FormSchema);
+    }
+    if (isArray(data)) {
+      updateData = [...data];
+    }
+
+    const hasField = updateData.every((item) => Reflect.has(item, 'field') && item.field);
+
+    if (!hasField) {
+      error(
+        'All children of the form Schema array that need to be updated must contain the `field` field'
+      );
+      return;
+    }
+    schemaRef.value = updateData as FormSchema[];
   }
 
   async function updateSchema(data: Partial<FormSchema> | Partial<FormSchema>[]) {
@@ -212,7 +238,9 @@ export function useFormEvents({
       const values = await validate();
       const res = handleFormValues(values);
       emit('submit', res);
-    } catch (error) {}
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   return {
@@ -222,6 +250,7 @@ export function useFormEvents({
     validateFields,
     getFieldsValue,
     updateSchema,
+    resetSchema,
     appendSchemaByField,
     removeSchemaByFiled,
     resetFields,

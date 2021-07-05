@@ -15,6 +15,7 @@
         <MenuItem key="profile" :text="t('layout.header.dropdownItemProfile')" icon="gg:profile" />
         <MenuDivider />
         <MenuItem
+          v-if="getUseLockPage"
           key="lock"
           :text="t('layout.header.tooltipLock')"
           icon="ion:lock-closed-outline"
@@ -40,7 +41,8 @@
 
   // res
 
-  import { userStore } from '/@/store/modules/user';
+  import { useUserStore } from '/@/store/modules/user';
+  import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
 
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -51,7 +53,7 @@
 
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
-  type MenuEvent = 'loginOut' | 'profile';
+  type MenuEvent = 'logout' | 'profile' | 'lock';
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -68,11 +70,12 @@
     setup() {
       const { prefixCls } = useDesign('header-user-dropdown');
       const { t } = useI18n();
+      const { getUseLockPage } = useHeaderSetting();
 
       const { push } = useRouter();
 
       const getUserInfo = computed(() => {
-        const { nickname = '', avatar = '' } = userStore.getUserInfoState || {};
+        const { nickname = '', avatar = '' } = useUserStore().getUserInfo || {};
         return { nickname, avatar };
       });
 
@@ -84,7 +87,7 @@
 
       //  login out
       function handleLoginOut() {
-        userStore.confirmLoginOut();
+        useUserStore().confirmLoginOut();
       }
 
       function handleMenuClick(e: { key: MenuEvent }) {
@@ -109,6 +112,7 @@
         handleMenuClick,
         headerImg,
         register,
+        getUseLockPage,
       };
     },
   });
@@ -124,10 +128,6 @@
     font-size: 12px;
     cursor: pointer;
     align-items: center;
-
-    &:hover {
-      background: @header-light-bg-hover-color;
-    }
 
     img {
       width: 40px;
@@ -145,11 +145,15 @@
 
     &--dark {
       &:hover {
-        background: @header-dark-bg-hover-color;
+        background-color: @header-dark-bg-hover-color;
       }
     }
 
     &--light {
+      &:hover {
+        background-color: @header-light-bg-hover-color;
+      }
+
       .@{prefix-cls}__name {
         color: @text-color-base;
       }

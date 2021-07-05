@@ -1,134 +1,187 @@
 import type { AppRouteRecordRaw, Menu } from '/@/router/types';
 
-import store from '/@/store';
+import { defineStore } from 'pinia';
+import { store } from '/@/store';
+import { useI18n } from '/@/hooks/web/useI18n';
+import { useUserStore } from './user';
+import { useAppStoreWithOut } from './app';
 import { toRaw } from 'vue';
-import { VuexModule, Mutation, Module, getModule, Action } from 'vuex-module-decorators';
-
-import { hotModuleUnregisterModule } from '/@/utils/helper/vuexHelper';
-
-import { PermissionModeEnum } from '/@/enums/appEnum';
-
-import { appStore } from '/@/store/modules/app';
-import { userStore } from '/@/store/modules/user';
-import projectSetting from '/@/settings/projectSetting';
-
-import { asyncRoutes } from '/@/router/routes';
-import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
 import { transformRouteToMenu } from '/@/router/helper/menuHelper';
 
+import projectSetting from '/@/settings/projectSetting';
+
+import { PermissionModeEnum } from '/@/enums/appEnum';
+
+import { asyncRoutes } from '/@/router/routes';
+import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
+
 import { filter } from '/@/utils/helper/treeHelper';
 
-import { getMenuListById } from '/@/api/sys/menu';
+import { getMenuList } from '/@/api/sys/menu';
+import { getPermCode } from '/@/api/sys/user';
 
 import { useMessage } from '/@/hooks/web/useMessage';
-import { useI18n } from '/@/hooks/web/useI18n';
 
-const NAME = 'app-permission';
-hotModuleUnregisterModule(NAME);
-@Module({ dynamic: true, namespaced: true, store, name: NAME })
-class Permission extends VuexModule {
+interface PermissionState {
   // Permission code list
-  private permCodeListState: string[] = [];
-
+  permCodeList: string[] | number[];
   // Whether the route has been dynamically added
-  private isDynamicAddedRouteState = false;
-
+  isDynamicAddedRoute: boolean;
   // To trigger a menu update
-  private lastBuildMenuTimeState = 0;
-
+  lastBuildMenuTime: number;
   // Backstage menu list
-  private backMenuListState: Menu[] = [];
+  backMenuList: Menu[];
+  frontMenuList: Menu[];
+}
+export const usePermissionStore = defineStore({
+  id: 'app-permission',
+  state: (): PermissionState => ({
+    permCodeList: [],
+    // Whether the route has been dynamically added
+    isDynamicAddedRoute: false,
+    // To trigger a menu update
+    lastBuildMenuTime: 0,
+    // Backstage menu list
+    backMenuList: [],
+    // menu List
+    frontMenuList: [],
+  }),
+  getters: {
+    getPermCodeList(): string[] | number[] {
+      return this.permCodeList;
+    },
+    getBackMenuList(): Menu[] {
+      return this.backMenuList;
+    },
+    getFrontMenuList(): Menu[] {
+      return this.frontMenuList;
+    },
+    getLastBuildMenuTime(): number {
+      return this.lastBuildMenuTime;
+    },
+    getIsDynamicAddedRoute(): boolean {
+      return this.isDynamicAddedRoute;
+    },
+  },
+  actions: {
+    setPermCodeList(codeList: string[]) {
+      this.permCodeList = codeList;
+    },
 
-  get getPermCodeListState() {
-    return this.permCodeListState;
-  }
+    setBackMenuList(list: Menu[]) {
+      this.backMenuList = list;
+      list?.length > 0 && this.setLastBuildMenuTime();
+    },
 
-  get getBackMenuListState() {
-    return this.backMenuListState;
-  }
+    setFrontMenuList(list: Menu[]) {
+      this.frontMenuList = list;
+    },
 
-  get getLastBuildMenuTimeState() {
-    return this.lastBuildMenuTimeState;
-  }
+    setLastBuildMenuTime() {
+      this.lastBuildMenuTime = new Date().getTime();
+    },
 
-  get getIsDynamicAddedRouteState() {
-    return this.isDynamicAddedRouteState;
-  }
+    setDynamicAddedRoute(added: boolean) {
+      this.isDynamicAddedRoute = added;
+    },
+    resetState(): void {
+      this.isDynamicAddedRoute = false;
+      this.permCodeList = [];
+      this.backMenuList = [];
+      this.lastBuildMenuTime = 0;
+    },
+    async changePermissionCode() {
+      const codeList = await getPermCode();
+      this.setPermCodeList(codeList);
+    },
+    async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
+      const { t } = useI18n();
+      const userStore = useUserStore();
+      const appStore = useAppStoreWithOut();
 
-  @Mutation
-  commitPermCodeListState(codeList: string[]): void {
-    this.permCodeListState = codeList;
-  }
+      let routes: AppRouteRecordRaw[] = [];
+      const roleList = toRaw(userStore.getRoleList) || [];
+      const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig;
 
-  @Mutation
-  commitBackMenuListState(list: Menu[]): void {
-    this.backMenuListState = list;
-  }
-
-  @Mutation
-  commitLastBuildMenuTimeState(): void {
-    this.lastBuildMenuTimeState = new Date().getTime();
-  }
-
-  @Mutation
-  commitDynamicAddedRouteState(added: boolean): void {
-    this.isDynamicAddedRouteState = added;
-  }
-
-  @Mutation
-  commitResetState(): void {
-    this.isDynamicAddedRouteState = false;
-    this.permCodeListState = [];
-    this.backMenuListState = [];
-    this.lastBuildMenuTimeState = 0;
-  }
-
-  @Action
-  async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
-    const { t } = useI18n();
-    let routes: AppRouteRecordRaw[] = [];
-    const roleList = toRaw(userStore.getRoleListState);
-    const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig;
-    // role permissions
-    if (permissionMode === PermissionModeEnum.ROLE) {
       const routeFilter = (route: AppRouteRecordRaw) => {
         const { meta } = route;
         const { roles } = meta || {};
         if (!roles) return true;
         return roleList.some((role) => roles.includes(role));
       };
-      routes = filter(asyncRoutes, routeFilter);
-      routes = routes.filter(routeFilter);
-      // Convert multi-level routing to level 2 routing
-      routes = flatMultiLevelRoutes(routes);
-      //  If you are sure that you do not need to do background dynamic permissions, please comment the entire judgment below
-    } else if (permissionMode === PermissionModeEnum.BACK) {
-      const { createMessage } = useMessage();
 
-      createMessage.loading({
-        content: t('sys.app.menuLoading'),
-        duration: 1,
-      });
-      // 这里获取后台路由菜单逻辑自行修改
-      //       const paramId = id || userStore.getUserInfoState.userId;
-      //       if (!paramId) {
-      //         throw new Error('paramId is undefined!');
-      //       }
-      let routeList = (await getMenuListById()) as AppRouteRecordRaw[];
+      const routeRmoveIgnoreFilter = (route: AppRouteRecordRaw) => {
+        const { meta } = route;
+        const { ignoreRoute } = meta || {};
+        return !ignoreRoute;
+      };
 
-      // Dynamically introduce components
-      routeList = transformObjToRoute(routeList);
+      switch (permissionMode) {
+        case PermissionModeEnum.ROLE:
+          routes = filter(asyncRoutes, routeFilter);
+          routes = routes.filter(routeFilter);
+          // Convert multi-level routing to level 2 routing
+          routes = flatMultiLevelRoutes(routes);
+          break;
 
-      //  Background routing to menu structure
-      const backMenuList = transformRouteToMenu(routeList);
-      this.commitBackMenuListState(backMenuList);
+        case PermissionModeEnum.ROUTE_MAPPING:
+          routes = filter(asyncRoutes, routeFilter);
+          routes = routes.filter(routeFilter);
+          const menuList = transformRouteToMenu(routes, true);
+          routes = filter(routes, routeRmoveIgnoreFilter);
+          routes = routes.filter(routeRmoveIgnoreFilter);
+          menuList.sort((a, b) => {
+            return (a.meta?.orderNo || 0) - (b.meta?.orderNo || 0);
+          });
 
-      routeList = flatMultiLevelRoutes(routeList);
-      routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
-    }
-    routes.push(ERROR_LOG_ROUTE);
-    return routes;
-  }
+          this.setFrontMenuList(menuList);
+          // Convert multi-level routing to level 2 routing
+          routes = flatMultiLevelRoutes(routes);
+          break;
+
+        //  If you are sure that you do not need to do background dynamic permissions, please comment the entire judgment below
+        case PermissionModeEnum.BACK:
+          const { createMessage } = useMessage();
+
+          createMessage.loading({
+            content: t('sys.app.menuLoading'),
+            duration: 1,
+          });
+
+          // !Simulate to obtain permission codes from the background,
+          // this function may only need to be executed once, and the actual project can be put at the right time by itself
+          let routeList: AppRouteRecordRaw[] = [];
+          try {
+            //this.changePermissionCode();
+            routeList = (await getMenuList()) as AppRouteRecordRaw[];
+          } catch (error) {
+            console.error(error);
+          }
+
+          // Dynamically introduce components
+          routeList = transformObjToRoute(routeList);
+
+          //  Background routing to menu structure
+          const backMenuList = transformRouteToMenu(routeList);
+          this.setBackMenuList(backMenuList);
+
+          // remove meta.ignoreRoute item
+          routeList = filter(routeList, routeRmoveIgnoreFilter);
+          routeList = routeList.filter(routeRmoveIgnoreFilter);
+
+          routeList = flatMultiLevelRoutes(routeList);
+          routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
+          break;
+      }
+
+      routes.push(ERROR_LOG_ROUTE);
+      return routes;
+    },
+  },
+});
+
+// Need to be used outside the setup
+export function usePermissionStoreWithOut() {
+  return usePermissionStore(store);
 }
-export const permissionStore = getModule<Permission>(Permission);

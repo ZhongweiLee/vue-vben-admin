@@ -7,14 +7,18 @@ import {
   ThemeEnum,
   RouterTransitionEnum,
   SettingButtonPositionEnum,
+  SessionTimeoutProcessingEnum,
 } from '/@/enums/appEnum';
 import { SIDE_BAR_BG_COLOR_LIST, HEADER_PRESET_BG_COLOR_LIST } from './designSetting';
-import { primaryColor, themeMode } from '../../build/config/themeConfig';
+import { primaryColor } from '../../build/config/themeConfig';
 
 // ! You need to clear the browser cache after the change
 const setting: ProjectConfig = {
   // Whether to show the configuration button
   showSettingButton: true,
+
+  // Whether to show the theme switch button
+  showDarkModeToggle: true,
 
   // `Settings` button position
   settingButtonPosition: SettingButtonPositionEnum.AUTO,
@@ -25,11 +29,11 @@ const setting: ProjectConfig = {
   // Permission-related cache is stored in sessionStorage or localStorage
   permissionCacheType: CacheTypeEnum.LOCAL,
 
+  // Session timeout processing
+  sessionTimeoutProcessing: SessionTimeoutProcessingEnum.ROUTE_JUMP,
+
   // color
   themeColor: primaryColor,
-
-  // TODO dark theme
-  themeMode: themeMode,
 
   // Website gray mode, open for possible mourning dates
   grayMode: false,
@@ -61,7 +65,6 @@ const setting: ProjectConfig = {
     theme: ThemeEnum.LIGHT,
     // Whether to enable the lock screen function
     useLockPage: true,
-
     // Whether to show the full screen button
     showFullScreen: true,
     // Whether to show the document button
@@ -115,13 +118,13 @@ const setting: ProjectConfig = {
 
   // Multi-label
   multiTabsSetting: {
+    cache: false,
     // Turn on
     show: true,
     // Is it possible to drag and drop sorting tabs
     canDrag: true,
     // Turn on quick actions
     showQuick: true,
-
     // Whether to show the refresh button
     showRedo: true,
     // Whether to show the collapse button

@@ -5,7 +5,23 @@
   >
     <div
       :class="`${prefixCls}__unlock`"
-      class="absolute top-0 left-1/2 flex pt-5 h-16 items-center justify-center sm:text-md xl:text-xl text-white flex-col cursor-pointer transform translate-x-1/2"
+      class="
+        absolute
+        top-0
+        left-1/2
+        flex
+        pt-5
+        h-16
+        items-center
+        justify-center
+        sm:text-md
+        xl:text-xl
+        text-white
+        flex-col
+        cursor-pointer
+        transform
+        translate-x-1/2
+      "
       @click="handleShowForm(false)"
       v-show="showDate"
     >
@@ -41,7 +57,7 @@
             class="enter-x"
             v-model:value="password"
           />
-          <span :class="`${prefixCls}-entry__err-msg enter-x`" v-if="errMsgRef">
+          <span :class="`${prefixCls}-entry__err-msg enter-x`" v-if="errMsg">
             {{ t('sys.lock.alert') }}
           </span>
           <div :class="`${prefixCls}-entry__footer enter-x`">
@@ -49,7 +65,7 @@
               type="link"
               size="small"
               class="mt-2 mr-2 enter-x"
-              :disabled="loadingRef"
+              :disabled="loading"
               @click="handleShowForm(true)"
             >
               {{ t('common.back') }}
@@ -58,12 +74,12 @@
               type="link"
               size="small"
               class="mt-2 mr-2 enter-x"
-              :disabled="loadingRef"
+              :disabled="loading"
               @click="goLogin"
             >
               {{ t('sys.lock.backToLogin') }}
             </a-button>
-            <a-button class="mt-2" type="link" size="small" @click="unLock()" :loading="loadingRef">
+            <a-button class="mt-2" type="link" size="small" @click="unLock()" :loading="loading">
               {{ t('sys.lock.entry') }}
             </a-button>
           </div>
@@ -83,8 +99,8 @@
   import { defineComponent, ref, computed } from 'vue';
   import { Input } from 'ant-design-vue';
 
-  import { userStore } from '/@/store/modules/user';
-  import { lockStore } from '/@/store/modules/lock';
+  import { useUserStore } from '/@/store/modules/user';
+  import { useLockStore } from '/@/store/modules/lock';
   import { useI18n } from '/@/hooks/web/useI18n';
 
   import { useNow } from './useNow';
@@ -98,19 +114,21 @@
     components: { LockOutlined, InputPassword: Input.Password },
 
     setup() {
-      const passwordRef = ref('');
-      const loadingRef = ref(false);
-      const errMsgRef = ref(false);
+      const password = ref('');
+      const loading = ref(false);
+      const errMsg = ref(false);
       const showDate = ref(true);
 
       const { prefixCls } = useDesign('lock-page');
+      const lockStore = useLockStore();
+      const userStore = useUserStore();
 
       const { ...state } = useNow(true);
 
       const { t } = useI18n();
 
       const getUserInfo = computed(() => {
-        const { nickname, avatar = headerImg } = userStore.getUserInfoState || {};
+        const { nickname, avatar = headerImg } = userStore.getUserInfo || {};
         return { nickname, avatar };
       });
 
@@ -118,16 +136,16 @@
        * @description: unLock
        */
       async function unLock() {
-        if (!passwordRef.value) {
+        if (!password.value) {
           return;
         }
-        let password = passwordRef.value;
+        let pwd = password.value;
         try {
-          loadingRef.value = true;
-          const res = await lockStore.unLockAction({ password });
-          errMsgRef.value = !res;
+          loading.value = true;
+          const res = await lockStore.unLock(pwd);
+          errMsg.value = !res;
         } finally {
-          loadingRef.value = false;
+          loading.value = false;
         }
       }
 
@@ -144,12 +162,12 @@
         goLogin,
         getUserInfo,
         unLock,
-        errMsgRef,
-        loadingRef,
+        errMsg,
+        loading,
         t,
         prefixCls,
         showDate,
-        password: passwordRef,
+        password,
         handleShowForm,
         headerImg,
         ...state,
@@ -172,7 +190,7 @@
       display: flex;
       font-weight: 700;
       color: #bababa;
-      background: #141313;
+      background-color: #141313;
       border-radius: 30px;
       justify-content: center;
       align-items: center;
@@ -219,7 +237,7 @@
       display: flex;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(8px);
       justify-content: center;
       align-items: center;

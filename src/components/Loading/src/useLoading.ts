@@ -1,6 +1,6 @@
 import { unref } from 'vue';
 import { createLoading } from './createLoading';
-import type { LoadingProps } from './types';
+import type { LoadingProps } from './typing';
 import type { Ref } from 'vue';
 
 export interface UseLoadingOptions {
@@ -27,7 +27,7 @@ export function useLoading(opt: Partial<LoadingProps> | Partial<UseLoadingOption
     props = opt as Partial<LoadingProps>;
   }
 
-  const instance = createLoading(props);
+  const instance = createLoading(props, undefined, true);
 
   const open = (): void => {
     const t = unref(target);
