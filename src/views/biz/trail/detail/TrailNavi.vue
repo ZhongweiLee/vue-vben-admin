@@ -16,7 +16,7 @@
       <template #f1="{ model, field }">
         <Image width="140" :src="envelopePicRef" v-model:value="model[field]" />
         <Upload :showUploadList="false">
-          <Button class="ml-5"> <Icon icon="feather:upload" />更换头像 </Button>
+          <Button class="ml-5"> <Icon icon="feather:upload" />更换封面图片 </Button>
         </Upload>
       </template>
     </BasicForm>

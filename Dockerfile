@@ -7,5 +7,6 @@ RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo Asia/Shangh
 
 COPY dist/ /usr/share/nginx/html
 COPY ./vhost.nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./http.nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
